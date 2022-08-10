@@ -93,7 +93,9 @@ export const EstimatedCosts = (props: any) => {
               Select a Brand
             </option>
             {brands.map((brand: any) => (
-              <option value={brand.id}>{brand.name}</option>
+              <option key={brand.id} value={brand.id}>
+                {brand.name}
+              </option>
             ))}
           </select>
           <ul>
