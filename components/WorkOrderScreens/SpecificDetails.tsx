@@ -18,7 +18,7 @@ export const SpecificDetails = (props: any) => {
         {!pics ? null : (
           <ul>
             {pics.map((url: any, index: any) => (
-              <li>
+              <li key={index}>
                 Image {index + 1} - <Link href={url}>Link</Link>
               </li>
             ))}
