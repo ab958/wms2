@@ -1,4 +1,5 @@
 export interface WorkOrder {
+  id: number
   email?: string;
   tracker_status?: number;
   tracking_id?: number | null;
