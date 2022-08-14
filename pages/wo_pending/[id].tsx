@@ -41,7 +41,9 @@ const Index: NextPage = (props: any) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    let formData = {};
+    let formData = {
+      time_accepted: new Date().toISOString().toLocaleString(),
+    };
     let submitFlag = true;
 
     Array.prototype.forEach.call(
@@ -68,7 +70,7 @@ const Index: NextPage = (props: any) => {
         if (!submitFlag) {
           formData = { ...formData, tracker_status: 99 };
         } else {
-          formData = { ...formData, tracker_status: 2 };
+          formData = { ...formData, tracker_status: 1 };
         }
 
         if (!submitFlag) {
@@ -79,6 +81,7 @@ const Index: NextPage = (props: any) => {
               recipient: workOrder.email,
               comment: {
                 body: `
+                We are sorry to inform you that your work order has not been completed. The reason for decline and full work order details are below.
                       ${
                         workOrder.decline_reason
                           ? `Decline reason: ${workOrder.decline_reason} \n`
@@ -350,20 +353,6 @@ const Index: NextPage = (props: any) => {
             alert('Error updating Zendesk Ticket - please try again');
             throw new Error('Zendesk Ticket Update error');
           }
-          const { data, error } = await supabaseClient
-            .from('order')
-            .update(formData)
-            .eq('id', props.id);
-          console.log(data);
-          if (error) {
-            alert('Submission failed - please try again');
-            console.log(error.message);
-            throw new Error('Order Update error');
-          }
-          alert('Ticket updated successfully');
-          Router.push({
-            pathname: `/`,
-          });
         } else {
           const ticketData = {
             ticket: {
@@ -642,21 +631,21 @@ const Index: NextPage = (props: any) => {
             alert('Error updating Zendesk Ticket - please try again');
             throw new Error('Zendesk Ticket Update error');
           }
-          const { data, error } = await supabaseClient
-            .from('order')
-            .update(formData)
-            .eq('id', props.id);
-          console.log(data);
-          if (error) {
-            alert('Submission failed - please try again');
-            console.log(error.message);
-            throw new Error('Order Update error');
-          }
-          alert('Ticket updated successfully');
-          Router.push({
-            pathname: `/`,
-          });
         }
+        const { data, error } = await supabaseClient
+          .from('order')
+          .update(formData)
+          .eq('id', props.id);
+        console.log(data);
+        if (error) {
+          alert('Database update failed - please try again');
+          console.log(error.message);
+          throw new Error('Order Update error');
+        }
+        alert('Ticket updated successfully');
+        Router.push({
+          pathname: `/`,
+        });
       }
     );
   };
