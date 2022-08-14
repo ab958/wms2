@@ -3,7 +3,7 @@ export const StartChoices = (props: any) => {
 
   return (
     <>
-      {workers && (
+      {props && workers && (
         <>
           <h1>Complete this to start</h1>
 
@@ -15,11 +15,11 @@ export const StartChoices = (props: any) => {
             <option hidden disabled selected>
               Select a Worker
             </option>
-            {/* {workers.map(({ name, id }) => (
+            {workers.map(({ name, id }) => (
               <option key={id} value={id}>
                 {name}
               </option>
-            ))} */}
+            ))}
           </select>
 
           <label htmlFor="startDate">Expected Finish Date:</label>
