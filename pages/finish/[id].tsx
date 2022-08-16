@@ -9,11 +9,11 @@ import { TimeSummary } from '../../components/WorkOrderScreens/Finish/TimeSummar
 import { FinishWO } from '../../components/WorkOrderScreens/Finish/FinishWO';
 import { PricingSummary } from '../../components/WorkOrderScreens/Finish/PricingSummary';
 import { SpecificDetails } from '../../components/WorkOrderScreens/SpecificDetails';
-import { updateZendeskTicket } from '../../data/services/zendesk';
+// import { updateZendeskTicket } from '../../data/services/zendesk';
 import { supabaseClient } from '../../lib/client';
 import Router from 'next/router';
-import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
-import { workOrderCompleteCopy } from '../../components/ZendeskEmails/WorkOrderComplete';
+// import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
+// import { workOrderCompleteCopy } from '../../components/ZendeskEmails/WorkOrderComplete';
 
 interface File {
   name: string;
@@ -99,17 +99,17 @@ const FinishIndex: NextPage = (props: any) => {
       }
     );
     if (!submitFlag) {
-      const rejectedBody: any = rejectedCopy(workOrder, specifics);
-      const ticketData = {
-        ticket: {
-          subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
-          status: 'solved',
-          recipient: workOrder.email,
-          comment: {
-            body: rejectedBody,
-          },
-        },
-      };
+      // const rejectedBody: any = rejectedCopy(workOrder, specifics);
+      // const ticketData = {
+      //   ticket: {
+      //     subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
+      //     status: 'solved',
+      //     recipient: workOrder.email,
+      //     comment: {
+      //       body: rejectedBody,
+      //     },
+      //   },
+      // };
       const { data, error } = await supabaseClient
         .from('order')
         .update(formData)
@@ -120,30 +120,30 @@ const FinishIndex: NextPage = (props: any) => {
         console.log(error.message);
         throw new Error('Order Update error');
       }
-      const response = await updateZendeskTicket(
-        workOrder.zendesk_id,
-        ticketData
-      );
-      console.log(response);
-      if (!response.success) {
-        alert('Error closing Zendesk Ticket - please try again');
-        throw new Error('Zendesk Ticket Update error');
-      }
+      // const response = await updateZendeskTicket(
+      //   workOrder.zendesk_id,
+      //   ticketData
+      // );
+      // console.log(response);
+      // if (!response.success) {
+      //   alert('Error closing Zendesk Ticket - please try again');
+      //   throw new Error('Zendesk Ticket Update error');
+      // }
     } else {
-      const completeBody = workOrderCompleteCopy(
-        workOrder,
-        specifics
-      );
-      const ticketData = {
-        ticket: {
-          subject: `Work Order Completed: ${workOrder['tracking_id']}`,
-          status: 'solved',
-          recipient: workOrder.email,
-          comment: {
-            body: completeBody,
-          },
-        },
-      };
+      // const completeBody = workOrderCompleteCopy(
+      //   workOrder,
+      //   specifics
+      // );
+      // const ticketData = {
+      //   ticket: {
+      //     subject: `Work Order Completed: ${workOrder['tracking_id']}`,
+      //     status: 'solved',
+      //     recipient: workOrder.email,
+      //     comment: {
+      //       body: completeBody,
+      //     },
+      //   },
+      // };
       const { data, error } = await supabaseClient
         .from('order')
         .update(formData)
@@ -154,15 +154,15 @@ const FinishIndex: NextPage = (props: any) => {
         console.log(error.message);
         throw new Error('Order Update error');
       }
-      const response = await updateZendeskTicket(
-        workOrder.zendesk_id,
-        ticketData
-      );
-      console.log(response);
-      if (!response.success) {
-        alert('Error closing Zendesk Ticket - please try again');
-        throw new Error('Zendesk Ticket Update error');
-      }
+      //   const response = await updateZendeskTicket(
+      //     workOrder.zendesk_id,
+      //     ticketData
+      //   );
+      //   console.log(response);
+      //   if (!response.success) {
+      //     alert('Error closing Zendesk Ticket - please try again');
+      //     throw new Error('Zendesk Ticket Update error');
+      //   }
     }
     alert('Ticket closed successfully');
     Router.push({

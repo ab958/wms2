@@ -8,9 +8,9 @@ import { ActionStartQueue } from '../../components/WorkOrderScreens/StartQueue/A
 import { getAllOrderData } from '../../data/services';
 import { supabaseClient } from '../../lib/client';
 import Button from '../../components/Button';
-import { updateZendeskTicket } from '../../data/services/zendesk';
+// import { updateZendeskTicket } from '../../data/services/zendesk';
 import Router from 'next/router';
-import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
+// import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
 
 const Index: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState<any>();
@@ -75,17 +75,17 @@ const Index: NextPage = (props: any) => {
       }
     );
     if (!submitFlag) {
-      const rejectedbody: any = rejectedCopy(workOrder, specifics);
-      const ticketData = {
-        ticket: {
-          subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
-          status: 'solved',
-          recipient: workOrder.email,
-          comment: {
-            body: rejectedbody,
-          },
-        },
-      };
+      // const rejectedbody: any = rejectedCopy(workOrder, specifics);
+      // const ticketData = {
+      //   ticket: {
+      //     subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
+      //     status: 'solved',
+      //     recipient: workOrder.email,
+      //     comment: {
+      //       body: rejectedbody,
+      //     },
+      //   },
+      // };
       const { data, error } = await supabaseClient
         .from('order')
         .update(formData)
@@ -96,59 +96,59 @@ const Index: NextPage = (props: any) => {
         console.log(error.message);
         throw new Error('Order Update error');
       }
-      const response = await updateZendeskTicket(
-        workOrder.zendesk_id,
-        ticketData
-      );
-      console.log(response);
-      if (!response.success) {
-        alert('Error updating Zendesk Ticket - please try again');
-        throw new Error('Zendesk Ticket Update error');
-      }
+      // const response = await updateZendeskTicket(
+      //   workOrder.zendesk_id,
+      //   ticketData
+      // );
+      // console.log(response);
+      // if (!response.success) {
+      //   alert('Error updating Zendesk Ticket - please try again');
+      //   throw new Error('Zendesk Ticket Update error');
+      // }
     } else {
-      const ticketData = {
-        ticket: {
-          subject: `Work Order Started: ${workOrder['tracking_id']} `,
-          status: 'pending',
-          recipient: workOrder.email,
-          comment: {
-            body: `
-            Your Work Order has now been started, we will let you know once it is complete.
-            
-            ${
-              workOrder.start_time
-                ? `  Start Time: ${workOrder.start_time} \n`
-                : ''
-            }
-            ${
-              workOrder.expected_finish_date
-                ? `Finish Date:  ${workOrder.expected_finish_date} \n`
-                : ''
-            }
-            ${
-              workOrder.worker_id
-                ? `Brand ID: ${workOrder.brand_id} \n`
-                : ''
-            }
-            ${
-              workOrder.brand_id
-                ? `Brand ID: ${workOrder.brand_id} \n`
-                : ''
-            }
-            ${
-              workOrder.initial_cost
-                ? ` Inital Cost: ${workOrder.initial_cost} \n`
-                : ''
-            }
-            ${
-              workOrder.work_task_id
-                ? ` Work Task ID: ${workOrder.work_task_id} \n`
-                : ''
-            }
-             `,
-          },
-        },
-      };
+      // const ticketData = {
+      //   ticket: {
+      //     subject: `Work Order Started: ${workOrder['tracking_id']} `,
+      //     status: 'pending',
+      //     recipient: workOrder.email,
+      //     comment: {
+      //       body: `
+      //       Your Work Order has now been started, we will let you know once it is complete.
+
+      //       ${
+      //         workOrder.start_time
+      //           ? `  Start Time: ${workOrder.start_time} \n`
+      //           : ''
+      //       }
+      //       ${
+      //         workOrder.expected_finish_date
+      //           ? `Finish Date:  ${workOrder.expected_finish_date} \n`
+      //           : ''
+      //       }
+      //       ${
+      //         workOrder.worker_id
+      //           ? `Brand ID: ${workOrder.brand_id} \n`
+      //           : ''
+      //       }
+      //       ${
+      //         workOrder.brand_id
+      //           ? `Brand ID: ${workOrder.brand_id} \n`
+      //           : ''
+      //       }
+      //       ${
+      //         workOrder.initial_cost
+      //           ? ` Inital Cost: ${workOrder.initial_cost} \n`
+      //           : ''
+      //       }
+      //       ${
+      //         workOrder.work_task_id
+      //           ? ` Work Task ID: ${workOrder.work_task_id} \n`
+      //           : ''
+      //       }
+      //        `,
+      //     },
+      //   },
+      // };
       const { data, error } = await supabaseClient
         .from('order')
         .update(formData)
@@ -159,15 +159,15 @@ const Index: NextPage = (props: any) => {
         console.log(error.message);
         throw new Error('Order Update error');
       }
-      const response = await updateZendeskTicket(
-        workOrder.zendesk_id,
-        ticketData
-      );
-      console.log(response);
-      if (!response.success) {
-        alert('Error updating Zendesk Ticket - please try again');
-        throw new Error('Zendesk Ticket Update error');
-      }
+      // const response = await updateZendeskTicket(
+      //   workOrder.zendesk_id,
+      //   ticketData
+      // );
+      // console.log(response);
+      // if (!response.success) {
+      //   alert('Error updating Zendesk Ticket - please try again');
+      //   throw new Error('Zendesk Ticket Update error');
+      // }
     }
     alert('Ticket updated successfully');
     Router.push({
