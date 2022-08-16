@@ -17,6 +17,7 @@ export const PricingSummary = (props: any) => {
         type="number"
         placeholder={props.workOrder.initial_cost}
         id="finalPrice"
+        step=".01"
         required
       />
       <label className="mt-3" htmlFor="finalUnits">

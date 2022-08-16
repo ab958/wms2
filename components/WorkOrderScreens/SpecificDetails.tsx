@@ -11,7 +11,7 @@ export const SpecificDetails = (props: any) => {
 
   return (
     <>
-      <h2>Specific Order Details</h2>
+      <h2 className="mt-3">Specific Order Details</h2>
       <ul>
         <li> --- </li>
         {!pics ? null : <h2>Customer Pictures</h2>}
@@ -31,11 +31,7 @@ export const SpecificDetails = (props: any) => {
           </ul>
         )}
       </ul>
-      {!skus ? null : skus.length === 1 ? (
-        <h3>SKU</h3>
-      ) : (
-        <h2>SKUs</h2>
-      )}
+      {!skus ? null : skus.length > 0 ? <h3>SKU(s)</h3> : null}
       <ul className="mb-3">
         {skus
           ? skus.map((sku: any, i: number) => {
