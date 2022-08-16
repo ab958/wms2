@@ -11,11 +11,11 @@ export const StartChoices = (props: any) => {
           <input type="date" id="startDate" />
 
           <label htmlFor="assignWorker">Assigned Worker:</label>
-          <select value="assignWorker">
+          <select id="assignWorker">
             <option hidden disabled selected>
               Select a Worker
             </option>
-            {workers.map(({ name, id }) => (
+            {workers.map(({ name, id }: any) => (
               <option key={id} value={id}>
                 {name}
               </option>
