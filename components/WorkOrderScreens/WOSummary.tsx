@@ -29,7 +29,9 @@ export const WOSummary = (props: any) => {
             </li>
             <li>
               <b>Date Submitted: </b>
-              {props ? order.created_at : 'not working rn'}
+              {props && order && order.created_at
+                ? order.created_at.slice(0, 10)
+                : ''}
             </li>
           </ul>
           <h2>Contact</h2>

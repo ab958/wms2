@@ -40,9 +40,7 @@ const WIPTable: React.FunctionComponent<Props> = ({
                   <div className="flex items-center">
                     <span>
                       {order.start_time
-                        ? (order.start_time as any)
-                            .slice(0, 19)
-                            .replace(/T/g, ' ')
+                        ? (order.start_time as any).slice(0, 10)
                         : null}
                     </span>
                   </div>
