@@ -57,7 +57,7 @@ export const EstimatedCosts = (props: any) => {
     <>
       {tasks && order && brands && (
         <>
-          <h2>Calculate Estimated Costs</h2>
+          <h2 className="mt-5">Calculate Estimated Costs</h2>
           <ul>
             <li> --- </li>
             <li>
@@ -88,6 +88,7 @@ export const EstimatedCosts = (props: any) => {
             name="brands"
             id="brands"
             onChange={(e) => handleBrandSelect(e.target.value)}
+            required
           >
             <option hidden disabled selected>
               Select a Brand
@@ -98,7 +99,7 @@ export const EstimatedCosts = (props: any) => {
               </option>
             ))}
           </select>
-          <ul>
+          <ul className="mt-3">
             <li>
               <b>Target Time (mins): </b> {targetTime} minutes
             </li>
