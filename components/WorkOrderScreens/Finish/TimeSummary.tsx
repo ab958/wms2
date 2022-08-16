@@ -17,13 +17,14 @@ export const TimeSummary = (props: any) => {
         <b>Target Time: </b> {workOrder.target_time} mins
       </p>
       <label htmlFor="finishTime">Actual Finish Date</label>
-      <input type="date" id="finishTime" />
+      <input type="date" id="finishTime" required />
 
-      <label htmlFor="timeTaken">Total Time Taken </label>
+      <label htmlFor="timeTaken">Total Time Taken (mins) </label>
       <input
-        type="text"
-        value={`${workOrder.target_time} mins`}
+        type="number"
+        placeholder={workOrder.target_time}
         id="timeTaken"
+        required
       />
     </>
   );

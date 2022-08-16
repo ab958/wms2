@@ -9,7 +9,7 @@ const NotStartedTable: React.FunctionComponent<Props> = ({
   <table className="min-w-max w-full table-auto">
     <thead>
       <tr className="bg-yellow-300 text-gray-600 uppercase text-sm leading-normal">
-        <th className="py-3 px-6 text-left">Time Accepted</th>
+        <th className="py-3 px-6 text-left">Date Accepted</th>
         <th className="py-3 px-6 text-left">ID</th>
         <th className="py-3 px-6 text-center">Work Task</th>
         <th className="py-3 px-6 text-center">Units / Quantity</th>

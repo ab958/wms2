@@ -1,40 +1,39 @@
-export const updateZendeskStatus = async (ticketID: number) => {
-  const subdomain = process.env.NEXT_PUBLIC_ZENDESK_SUBDOMAIN;
+import axios from "axios";
 
-  const data = {
-    ticket: {
-      body: 'testing update',
-    },
-  };
 
-  console.log(
-    `Authorization: Basic ${process.env.NEXT_PUBLIC_ZENDESK_EMAIL}/token:${process.env.NEXT_PUBLIC_ZENDESK_API_TOKEN}`
-  );
+export const createZendeskTicket = async (ticketData: object) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Basic ${process.env.NEXT_PUBLIC_ZENDESK_API_TOKEN}`,
+    };
+
+    const {data} = await axios.post(`${process.env.NEXT_PUBLIC_ZENDESK_URL}/api/v2/tickets.json`, ticketData,{
+      headers
+    })
+    return {success: true, data};
+  } catch (error) {
+    console.log(error);
+    return {success: false};
+  }
+};
+
+
+export const updateZendeskTicket = async (ticketID: number, ticketData: object) => {
 
   try {
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: `Basic ${process.env.NEXT_PUBLIC_ZENDESK_EMAIL}/token:${process.env.NEXT_PUBLIC_ZENDESK_API_TOKEN}`,
+      Authorization: `Basic ${process.env.NEXT_PUBLIC_ZENDESK_API_TOKEN}`,
     };
-    const response = await fetch(
-      `http://${subdomain}.zendesk.com/api/v2/tickets/${ticketID}.json/`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(data),
-        headers,
-      }
-    );
-    await response.json();
-    return true;
+
+    const {data} = await axios.put(`${process.env.NEXT_PUBLIC_ZENDESK_URL}/api/v2/tickets/${ticketID}.json`, ticketData,{
+      headers
+    })
+    return {success: true, data};
   } catch (error) {
     console.log(error);
-    return false;
+    return {success: false};
   }
 };
 
-// $.ajax({
-//     url: '/api/v2/users.json',
-//     contentType:'application/json',
-//     type: 'POST',
-//     data: JSON.stringify({user:{name: name, email:email}})
-//   });

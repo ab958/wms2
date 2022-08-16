@@ -5,22 +5,24 @@ import { FinishSummary } from '../../components/WorkOrderScreens/Finish/FinishSu
 import { finishOrder } from '../../data/services';
 import S3UploadFile from '../../components/s3UploadFile';
 import Button from '../../components/Button/';
-import { WorkOrder } from '../../interfaces/WorkOrder';
 import { TimeSummary } from '../../components/WorkOrderScreens/Finish/TimeSummary';
 import { FinishWO } from '../../components/WorkOrderScreens/Finish/FinishWO';
 import { PricingSummary } from '../../components/WorkOrderScreens/Finish/PricingSummary';
 import { SpecificDetails } from '../../components/WorkOrderScreens/SpecificDetails';
+import { updateZendeskTicket } from '../../data/services/zendesk';
+import { supabaseClient } from '../../lib/client';
+import Router from 'next/router';
+import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
+import { workOrderCompleteCopy } from '../../components/ZendeskEmails/WorkOrderComplete';
 
 interface File {
   name: string;
 }
 
 const FinishIndex: NextPage = (props: any) => {
-  const [workOrder, setWorkOrder] = useState<WorkOrder>({
-    email: '',
-  });
-  const [specifics, setSpecifics] = useState({});
-  const [tasks, setTasks] = useState({});
+  const [workOrder, setWorkOrder] = useState<any>();
+  const [specifics, setSpecifics] = useState<any>([]);
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     finishOrder(props.id).then((data: any) => {
@@ -39,46 +41,45 @@ const FinishIndex: NextPage = (props: any) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    let formData: WorkOrder = { tracker_status: 3 };
+    let formData: any = { tracker_status: 3 };
     let QCPics: any = [];
     const emailAd = workOrder ? workOrder.email : '';
+    let submitFlag = true;
 
     Array.prototype.forEach.call(
       e.target.elements,
-      (element: any) => {
+      async (element: any) => {
         console.log(element.id, ' ', element.value);
-        element.id == 'declineReason'
-          ? (formData = {
-              ...formData,
-              tracker_status: 99,
-              decline_reason: element.value,
-            })
-          : null;
-        element.id == 'timeTaken'
-          ? (formData = { ...formData, start_time: element.value })
-          : null;
-        element.id == 'finishTime'
-          ? (formData = { ...formData, finish_time: element.value })
-          : null;
-        element.id == 'finalPrice'
-          ? (formData = {
-              ...formData,
-              expected_finish_date: element.value,
-            })
-          : null;
-        element.id == 'finalUnits'
-          ? (formData = {
-              ...formData,
-              expected_finish_date: element.value,
-            })
-          : null;
-        element.id == 'finalComments' && element.value.length > 1
-          ? (formData = {
-              ...formData,
-              expected_finish_date: element.value,
-            })
-          : null;
-        if (element.id == 'QCPics') {
+        if (element.id == 'declineReason') {
+          formData = {
+            ...formData,
+            tracker_status: 99,
+            decline_reason: element.value,
+          };
+          submitFlag = false;
+        } else if (element.id == 'timeTaken') {
+          formData = { ...formData, minutes_taken: element.value };
+        } else if (element.id == 'finishTime') {
+          formData = { ...formData, finish_time: element.value };
+        } else if (element.id == 'finalPrice') {
+          formData = {
+            ...formData,
+            final_price: element.value,
+          };
+        } else if (element.id == 'finalUnits') {
+          formData = {
+            ...formData,
+            final_units_or_quantity: element.value,
+          };
+        } else if (
+          element.id == 'finalComments' &&
+          element.value.length > 1
+        ) {
+          formData = {
+            ...formData,
+            final_comments: element.value,
+          };
+        } else if (element.id == 'QCPics') {
           if (element.files) {
             [...element.files].forEach((file: File) => {
               S3UploadFile(file, emailAd);
@@ -91,6 +92,76 @@ const FinishIndex: NextPage = (props: any) => {
         QCPics.length > 0 ? (formData['qc_pics'] = QCPics) : null;
       }
     );
+    if (!submitFlag) {
+      const rejectedBody: any = rejectedCopy(workOrder, specifics);
+      const ticketData = {
+        ticket: {
+          subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
+          status: 'solved',
+          recipient: workOrder.email,
+          comment: {
+            body: rejectedBody,
+          },
+        },
+      };
+      const { data, error } = await supabaseClient
+        .from('order')
+        .update(formData)
+        .eq('id', props.id);
+      console.log(data);
+      if (error) {
+        alert('Database update failed - please try again');
+        console.log(error.message);
+        throw new Error('Order Update error');
+      }
+      const response = await updateZendeskTicket(
+        workOrder.zendesk_id,
+        ticketData
+      );
+      console.log(response);
+      if (!response.success) {
+        alert('Error closing Zendesk Ticket - please try again');
+        throw new Error('Zendesk Ticket Update error');
+      }
+    } else {
+      const completeBody = workOrderCompleteCopy(
+        workOrder,
+        specifics
+      );
+      const ticketData = {
+        ticket: {
+          subject: `Work Order Completed: ${workOrder['tracking_id']}`,
+          status: 'solved',
+          recipient: workOrder.email,
+          comment: {
+            body: completeBody,
+          },
+        },
+      };
+      const { data, error } = await supabaseClient
+        .from('order')
+        .update(formData)
+        .eq('id', props.id);
+      console.log(data);
+      if (error) {
+        alert('Database update failed - please try again');
+        console.log(error.message);
+        throw new Error('Order Update error');
+      }
+      const response = await updateZendeskTicket(
+        workOrder.zendesk_id,
+        ticketData
+      );
+      console.log(response);
+      if (!response.success) {
+        alert('Error closing Zendesk Ticket - please try again');
+        throw new Error('Zendesk Ticket Update error');
+      }
+    }
+    alert('Ticket closed successfully');
+    Router.push({
+      pathname: `/wip`,
+    });
   };
 
   return (

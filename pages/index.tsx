@@ -19,8 +19,11 @@ const IndexPage: NextPage = () => {
     });
   }, []);
 
+
+
   return (
     <>
+
       <Page
         layoutTitle="New Orders | Work Management System | TuPack"
         pageName="New Orders"

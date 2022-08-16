@@ -89,11 +89,13 @@ export const EstimatedCosts = (props: any) => {
             id="brands"
             onChange={(e) => handleBrandSelect(e.target.value)}
           >
-            <option hidden disabled value="">
+            <option hidden disabled selected>
               Select a Brand
             </option>
             {brands.map((brand: any) => (
-              <option value={brand.id}>{brand.name}</option>
+              <option key={brand.id} value={brand.id}>
+                {brand.name}
+              </option>
             ))}
           </select>
           <ul>

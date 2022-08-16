@@ -8,19 +8,18 @@ import { ActionStartQueue } from '../../components/WorkOrderScreens/StartQueue/A
 import { getAllOrderData } from '../../data/services';
 import { supabaseClient } from '../../lib/client';
 import Button from '../../components/Button';
-import { WorkOrder } from '../../interfaces/WorkOrder';
+import { updateZendeskTicket } from '../../data/services/zendesk';
+import Router from 'next/router';
+import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
 
 const Index: NextPage = (props: any) => {
-  const [workOrder, setWorkOrder] = useState<WorkOrder>({
-    tracking_id: null,
-  });
-  const [specifics, setSpecifics] = useState({});
-  const [tasks, setTasks] = useState({});
-  const [workers, setWorkers] = useState({});
+  const [workOrder, setWorkOrder] = useState<any>();
+  const [specifics, setSpecifics] = useState<any>([]);
+  const [tasks, setTasks] = useState([]);
+  const [workers, setWorkers] = useState([]);
 
   useEffect(() => {
     getAllOrderData(props.id).then((data: any) => {
-      console.log(data);
       if (data.order) {
         setWorkOrder(data.order);
       }
@@ -35,45 +34,145 @@ const Index: NextPage = (props: any) => {
       }
     });
   }, []);
+  console.log('specifics->', specifics);
+
+  console.log('work oder=>', workOrder);
+  console.log('workers=>', workers);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    let formData: WorkOrder = { tracker_status: 2 };
 
+    let formData: any = {
+      tracker_status: 2,
+    };
+    let submitFlag = true;
+
+    console.log(e.target.elements, '<=elements');
     Array.prototype.forEach.call(
       e.target.elements,
-      (element: any) => {
-        console.log(element.id, ' ', element.value);
-        element.id == 'declineReason'
-          ? (formData = {
-              ...formData,
-              tracker_status: 99,
-              decline_reason: element.value,
-            })
-          : null;
-        element.id == 'startDate'
-          ? (formData = { ...formData, start_time: element.value })
-          : null;
-        element.id == 'estFinishDate'
-          ? (formData = {
-              ...formData,
-              expected_finish_date: element.value,
-            })
-          : null;
+      async (element: any) => {
+        console.log('element id =>', element.id, ' ', element.value);
+
+        if (element.id == 'declineReason') {
+          formData = {
+            ...formData,
+            tracker_status: 99,
+            decline_reason: element.value,
+          };
+          submitFlag = false;
+        } else if (element.id == 'startDate') {
+          formData = { ...formData, start_time: element.value };
+        } else if (element.id == 'assignWorker') {
+          formData = { ...formData, worker_id: element.value };
+        } else if (element.id == 'estFinishDate') {
+          formData = {
+            ...formData,
+            expected_finish_date: element.value,
+          };
+        } else if (element.id == 'submitReject') {
+          submitFlag = false;
+        }
       }
     );
-
-    const { data, error } = await supabaseClient
-      .from('order')
-      .update(formData)
-      .eq('id', props.id);
-    console.log(data);
-    if (error) {
-      console.log(error.message);
+    if (!submitFlag) {
+      const rejectedbody: any = rejectedCopy(workOrder, specifics);
+      const ticketData = {
+        ticket: {
+          subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
+          status: 'solved',
+          recipient: workOrder.email,
+          comment: {
+            body: rejectedbody,
+          },
+        },
+      };
+      const { data, error } = await supabaseClient
+        .from('order')
+        .update(formData)
+        .eq('id', props.id);
+      console.log(data);
+      if (error) {
+        alert('Database update failed - please try again');
+        console.log(error.message);
+        throw new Error('Order Update error');
+      }
+      const response = await updateZendeskTicket(
+        workOrder.zendesk_id,
+        ticketData
+      );
+      console.log(response);
+      if (!response.success) {
+        alert('Error updating Zendesk Ticket - please try again');
+        throw new Error('Zendesk Ticket Update error');
+      }
+    } else {
+      const ticketData = {
+        ticket: {
+          subject: `Work Order Started: ${workOrder['tracking_id']} `,
+          status: 'pending',
+          recipient: workOrder.email,
+          comment: {
+            body: `
+            Your Work Order has now been started, we will let you know once it is complete.
+            
+            ${
+              workOrder.start_time
+                ? `  Start Time: ${workOrder.start_time} \n`
+                : ''
+            }
+            ${
+              workOrder.expected_finish_date
+                ? `Finish Date:  ${workOrder.expected_finish_date} \n`
+                : ''
+            }
+            ${
+              workOrder.worker_id
+                ? `Brand ID: ${workOrder.brand_id} \n`
+                : ''
+            }
+            ${
+              workOrder.brand_id
+                ? `Brand ID: ${workOrder.brand_id} \n`
+                : ''
+            }
+            ${
+              workOrder.initial_cost
+                ? ` Inital Cost: ${workOrder.initial_cost} \n`
+                : ''
+            }
+            ${
+              workOrder.work_task_id
+                ? ` Work Task ID: ${workOrder.work_task_id} \n`
+                : ''
+            }
+             `,
+          },
+        },
+      };
+      const { data, error } = await supabaseClient
+        .from('order')
+        .update(formData)
+        .eq('id', props.id);
+      console.log(data);
+      if (error) {
+        alert('Database update failed - please try again');
+        console.log(error.message);
+        throw new Error('Order Update error');
+      }
+      const response = await updateZendeskTicket(
+        workOrder.zendesk_id,
+        ticketData
+      );
+      console.log(response);
+      if (!response.success) {
+        alert('Error updating Zendesk Ticket - please try again');
+        throw new Error('Zendesk Ticket Update error');
+      }
     }
-    if (data) {
-      alert('Submitted successfully');
-    }
+    alert('Ticket updated successfully');
+    Router.push({
+      pathname: `/notstarted`,
+    });
   };
 
   return (
