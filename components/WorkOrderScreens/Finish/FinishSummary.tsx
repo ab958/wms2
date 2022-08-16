@@ -9,7 +9,6 @@ export const FinishSummary = (props: any) => {
           <p className="mb-1">
             <b>Work Task: {''}</b>
             {
-              // 'TBCCC'
               tasks.find(
                 (task: any) => task.id == workOrder.work_task_id
               )?.name

@@ -11,10 +11,10 @@ import Title from '../../components/Title';
 
 const Index: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState({ tracking_id: null });
-  const [specifics, setSpecifics] = useState({});
-  const [tasks, setTasks] = useState({});
-  const [workers, setWorkers] = useState({});
-  const [brands, setBrands] = useState({});
+  const [specifics, setSpecifics] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [workers, setWorkers] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   useEffect(() => {
     getAllOrderData(props.id).then((data: any) => {

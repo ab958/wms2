@@ -6,7 +6,7 @@ export const WarehouseSummary = (props: any) => {
     <>
       {workOrder && (
         <>
-          <h1>Warehouse Notes</h1>
+          <h1 className="mt-3">Warehouse Notes</h1>
 
           <p>Warehouse Final Comments: {workOrder.final_comments}</p>
           {workOrder.qc_pics ? (
