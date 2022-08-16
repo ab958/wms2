@@ -24,6 +24,7 @@ export const AcceptWO = ({
         placeholder={String(estCost)}
         type="number"
         id="updateCost"
+        step=".01"
         required
       ></input>
       <p className="mt-3"></p>
@@ -31,7 +32,7 @@ export const AcceptWO = ({
       <p>Any notes to accepting a work order?</p>
       <textarea
         id="initialComments"
-        placeholder="Add Your notes to share with the customer here..."
+        placeholder="Add notes to share with the customer here..."
       ></textarea>
       <button id="submitAccept">Accept Work Order</button>
     </>
