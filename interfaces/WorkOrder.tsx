@@ -1,5 +1,4 @@
 export interface WorkOrder {
-  assigned_to_id: number;
   id: number;
   created_at?: Date;
   brand_entry?: number;

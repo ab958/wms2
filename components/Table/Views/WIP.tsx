@@ -90,7 +90,7 @@ const WIPTable: React.FunctionComponent<Props> = ({
                       {
                         workers.find(
                           (worker: any) =>
-                            worker.id === order.assigned_to_id
+                            worker.id === order.worker_id
                         )?.name
                       }
                     </span>
