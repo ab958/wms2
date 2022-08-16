@@ -11,20 +11,22 @@ export const PricingSummary = (props: any) => {
       </p>
 
       <label className="mt-3" htmlFor="finalPrice">
-        <h2>Final Price</h2>
+        <h2>Final Price (£)</h2>
       </label>
       <input
-        type="text"
-        value={`£${props.workOrder.initial_cost}`}
+        type="number"
+        placeholder={props.workOrder.initial_cost}
         id="finalPrice"
+        required
       />
       <label className="mt-3" htmlFor="finalUnits">
         <h2>Final Units / Quantity</h2>
       </label>
       <input
-        type="text"
-        value={`${props.workOrder.initial_units_or_quantity}`}
+        type="number"
+        placeholder={props.workOrder.initial_units_or_quantity}
         id="finalUnits"
+        required
       />
     </>
   );
