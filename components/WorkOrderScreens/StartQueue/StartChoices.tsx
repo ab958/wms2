@@ -1,3 +1,5 @@
+import { goBackXDaysCalendarFormat } from '../../../data/services/helpers';
+
 export const StartChoices = (props: any) => {
   const { workers } = props;
 
@@ -8,7 +10,11 @@ export const StartChoices = (props: any) => {
           <h1>Complete this to start</h1>
 
           <label htmlFor="startDate">Start Date:</label>
-          <input type="date" id="startDate" />
+          <input
+            type="date"
+            min={goBackXDaysCalendarFormat(7)}
+            id="startDate"
+          />
 
           <label htmlFor="assignWorker">Assigned Worker:</label>
           <select id="assignWorker">
@@ -23,7 +29,11 @@ export const StartChoices = (props: any) => {
           </select>
 
           <label htmlFor="startDate">Expected Finish Date:</label>
-          <input type="date" id="estFinishDate" />
+          <input
+            type="date"
+            min={goBackXDaysCalendarFormat(0)}
+            id="estFinishDate"
+          />
         </>
       )}
     </>

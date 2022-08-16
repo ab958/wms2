@@ -1,3 +1,5 @@
+import { goBackXDaysCalendarFormat } from '../../../data/services/helpers';
+
 export const TimeSummary = (props: any) => {
   const { workOrder } = props;
   console.log(props);
@@ -17,7 +19,12 @@ export const TimeSummary = (props: any) => {
         <b>Target Time: </b> {workOrder.target_time} mins
       </p>
       <label htmlFor="finishTime">Actual Finish Date</label>
-      <input type="date" id="finishTime" required />
+      <input
+        type="date"
+        min={goBackXDaysCalendarFormat(5)}
+        id="finishTime"
+        required
+      />
 
       <label htmlFor="timeTaken">Total Time Taken (mins) </label>
       <input
