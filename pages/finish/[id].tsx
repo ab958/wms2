@@ -41,6 +41,7 @@ const FinishIndex: NextPage = (props: any) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const S3_BUCKET = process.env.NEXT_PUBLIC_LOCAL_S3_BUCKET;
     let formData: any = { tracker_status: 3 };
     let QCPics: any = [];
     const emailAd = workOrder ? workOrder.email : '';
@@ -82,10 +83,15 @@ const FinishIndex: NextPage = (props: any) => {
         } else if (element.id == 'QCPics') {
           if (element.files) {
             [...element.files].forEach((file: File) => {
-              S3UploadFile(file, emailAd);
-              QCPics.push(
-                `https://wmspics.s3.amazonaws.com/${emailAd}/qc/${file.name}`
-              );
+              try {
+                S3UploadFile(file, emailAd);
+                QCPics.push(
+                  `https://${S3_BUCKET}.s3.eu-west-2.amazonaws.com/${emailAd}/${file.name}`
+                );
+              } catch (error) {
+                console.log(error);
+                throw new Error('Error uploading Image');
+              }
             });
           }
         }

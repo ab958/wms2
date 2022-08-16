@@ -33,7 +33,6 @@ const Index: NextPage = (props: any) => {
       if (data.brands) {
         setBrands(data.brands);
       } else {
-        console.log('didntwork');
       }
     });
   }, []);

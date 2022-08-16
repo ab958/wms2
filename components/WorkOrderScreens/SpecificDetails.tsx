@@ -14,12 +14,18 @@ export const SpecificDetails = (props: any) => {
       <h2>Specific Order Details</h2>
       <ul>
         <li> --- </li>
-        {!pics ? null : <h3>Customer Pictures</h3>}
+        {!pics ? null : <h2>Customer Pictures</h2>}
         {!pics ? null : (
           <ul>
             {pics.map((url: any, index: any) => (
               <li key={index}>
-                Image {index + 1} - <Link href={url}>Link</Link>
+                Image {index + 1} -{' '}
+                <Link
+                  href={url}
+                  className="text-blue-700 no-underline hover:underline"
+                >
+                  Click to download
+                </Link>
               </li>
             ))}
           </ul>
@@ -33,19 +39,16 @@ export const SpecificDetails = (props: any) => {
       <ul className="mb-3">
         {skus
           ? skus.map((sku: any, i: number) => {
-              return (
-                <li key={i}>
-                  {i + 1} {sku}
-                </li>
-              );
+              return <li key={i}>{sku}</li>;
             })
           : null}
       </ul>
+      <h3>More Order Detail</h3>
       {specifics.map((specific) =>
         specific[0] == 'skus' || specific[0] == 'pics' ? null : (
-          <li key={specific[0]}>
-            {specific[0]}: {specific[1]}
-          </li>
+          <p>
+            <b>{specific[0]}:</b> {specific[1]}
+          </p>
         )
       )}
     </>
