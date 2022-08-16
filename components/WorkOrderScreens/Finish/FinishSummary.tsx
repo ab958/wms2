@@ -6,16 +6,16 @@ export const FinishSummary = (props: any) => {
       {workOrder && tasks && (
         <>
           <h1>Finish Order: #{workOrder.tracking_id}</h1>
-          <p>
-            Task:
-            {/* {
+          <p className="mb-1">
+            <b>Work Task: {''}</b>
+            {
               // 'TBCCC'
               tasks.find(
                 (task: any) => task.id == workOrder.work_task_id
               )?.name
-            } */}
+            }
           </p>
-          <p>
+          <p className="mb-4">
             Total Units / Quantity:{' '}
             {workOrder.initial_units_or_quantity}
           </p>
