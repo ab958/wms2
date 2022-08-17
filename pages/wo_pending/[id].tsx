@@ -4,13 +4,16 @@ import Layout from '../../components/Layout/Layout';
 import { WOSummary } from '../../components/WorkOrderScreens/WOSummary';
 import { SpecificDetails } from '../../components/WorkOrderScreens/SpecificDetails';
 import { EstimatedCosts } from '../../components/WorkOrderScreens/EstimatedCosts';
-import { queueOrderAcceptReject } from '../../data/services';
+import {
+  queueOrderAcceptReject,
+  updateOrderTable,
+} from '../../data/services';
 import Button from '../../components/Button';
 import Title from '../../components/Title';
-import { supabaseClient } from '../../lib/client';
 import Router from 'next/router';
-// import { updateZendeskTicket } from '../../data/services/zendesk';
-// import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
+import { updateZendeskTicket } from '../../data/services/zendesk';
+import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
+import { throwZendeskDBUpdateError } from '../../data/services/helpers';
 
 const Index: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState<any>({});
@@ -42,6 +45,7 @@ const Index: NextPage = (props: any) => {
 
     let formData: any = {
       time_accepted: new Date().toISOString().toLocaleString(),
+      tracker_status: 1,
     };
     let submitFlag = true;
 
@@ -63,101 +67,81 @@ const Index: NextPage = (props: any) => {
         } else if (element.id == 'brands') {
           formData = { ...formData, brand_id: element.value };
         } else if (element.id == 'submitReject') {
-          submitFlag = false;
-        }
-
-        if (!submitFlag) {
           formData = { ...formData, tracker_status: 99 };
-        } else {
-          formData = { ...formData, tracker_status: 1 };
+          submitFlag = false;
         }
       }
     );
     if (!submitFlag) {
-      // const rejectedbody: any = rejectedCopy(workOrder, specifics);
-      // const ticketData = {
-      //   ticket: {
-      //     subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
-      //     status: 'solved',
-      //     recipient: workOrder.email,
-      //     comment: {
-      //       body: rejectedbody,
-      //     },
-      //   },
-      // };
-      const { data, error } = await supabaseClient
-        .from('order')
-        .update(formData)
-        .eq('id', props.id);
-      console.log(data);
-      if (error) {
-        alert('Database update failed - please try again');
-        console.log(error.message);
-        throw new Error('Order Update error');
+      const rejectedbody: any = rejectedCopy(workOrder, specifics);
+      const ticketData = {
+        ticket: {
+          subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
+          status: 'solved',
+          recipient: workOrder.email,
+          comment: {
+            body: rejectedbody,
+          },
+        },
+      };
+      const tableUpdate = await updateOrderTable(formData, props.id);
+      if (tableUpdate.error) {
+        throwZendeskDBUpdateError(tableUpdate.error);
       }
-      // const response = await updateZendeskTicket(
-      //   workOrder.zendesk_id,
-      //   ticketData
-      // );
-      // console.log(response);
-      // if (!response.success) {
-      //   alert('Error updating Zendesk Ticket - please try again');
-      //   throw new Error('Zendesk Ticket Update error');
-      // }
+      const response = await updateZendeskTicket(
+        workOrder.zendesk_id,
+        ticketData
+      );
+      if (!response.success) {
+        alert('Error updating Zendesk Ticket - please try again');
+        throw new Error('Zendesk Ticket Update error');
+      }
     } else {
-      // const ticketData = {
-      //   ticket: {
-      //     subject: `Work Order Accepted: ${workOrder['tracking_id']} `,
-      //     status: 'pending',
-      //     recipient: workOrder.email,
-      //     comment: {
-      //       body: `
-      //       Your Work Order has been accepted. We will update you again once work has started, thanks.
-      //       ${
-      //         workOrder.brand_id
-      //           ? `Brand ID: ${workOrder.brand_id} \n`
-      //           : ''
-      //       }
-      //       ${
-      //         workOrder.initial_cost
-      //           ? ` Inital Cost: ${workOrder.initial_cost} \n`
-      //           : ''
-      //       }
-      //       ${
-      //         workOrder.initial_units_or_quantity
-      //           ? ` Inital Units/Quantity: ${workOrder.initial_units_or_quantity} \n`
-      //           : ''
-      //       }
-      //       ${
-      //         workOrder.work_task_id
-      //           ? ` Work Task ID: ${workOrder.work_task_id} \n`
-      //           : ''
-      //       }
+      const ticketData = {
+        ticket: {
+          subject: `Work Order Accepted: ${workOrder['tracking_id']} `,
+          status: 'pending',
+          recipient: workOrder.email,
+          comment: {
+            body: `
+            Your Work Order has been accepted. We will update you again once work has started, thanks.
+            ${
+              workOrder.brand_id
+                ? `Brand ID: ${workOrder.brand_id} \n`
+                : ''
+            }
+            ${
+              workOrder.initial_cost
+                ? ` Inital Cost: ${workOrder.initial_cost} \n`
+                : ''
+            }
+            ${
+              workOrder.initial_units_or_quantity
+                ? ` Inital Units/Quantity: ${workOrder.initial_units_or_quantity} \n`
+                : ''
+            }
+            ${
+              workOrder.work_task_id
+                ? ` Work Task ID: ${workOrder.work_task_id} \n`
+                : ''
+            }`,
+          },
+        },
+      };
 
-      //            `,
-      //     },
-      //   },
-      // };
-
-      const { data, error } = await supabaseClient
-        .from('order')
-        .update(formData)
-        .eq('id', props.id);
-      console.log(data);
-      if (error) {
-        alert('Database update failed - please try again');
-        console.log(error.message);
-        throw new Error('Order Update error');
+      const tableUpdate = await updateOrderTable(formData, props.id);
+      if (tableUpdate.error) {
+        throwZendeskDBUpdateError(tableUpdate.error);
       }
-      // const response = await updateZendeskTicket(
-      //   workOrder.zendesk_id,
-      //   ticketData
-      // );
-      // console.log(response);
-      // if (!response.success) {
-      //   alert('Error updating Zendesk Ticket - please try again');
-      //   throw new Error('Zendesk Ticket Update error');
-      // }
+      const response = await updateZendeskTicket(
+        workOrder.zendesk_id,
+        ticketData
+      );
+      console.log(response);
+      if (!response.success) {
+        alert('Error updating Zendesk Ticket - please try again');
+        throw new Error('Zendesk Ticket Update error');
+      }
     }
 
     alert('Ticket updated successfully');
