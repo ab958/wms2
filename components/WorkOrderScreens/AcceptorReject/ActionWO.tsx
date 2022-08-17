@@ -16,6 +16,10 @@ export const ActionWO = ({
   return (
     <>
       <h2 className="mt-3">Accept / Reject Work Order</h2>
+      {WOAction && WOAction === 'accept' ? (
+        <AcceptWO targetTime={targetTime} estCost={estCost} />
+      ) : null}
+      {WOAction && WOAction === 'reject' ? <RejectWO /> : null}
       <button
         id="accept"
         type="button"
@@ -30,10 +34,6 @@ export const ActionWO = ({
       >
         Reject
       </button>
-      {WOAction && WOAction === 'accept' ? (
-        <AcceptWO targetTime={targetTime} estCost={estCost} />
-      ) : null}
-      {WOAction && WOAction === 'reject' ? <RejectWO /> : null}
     </>
   );
 };

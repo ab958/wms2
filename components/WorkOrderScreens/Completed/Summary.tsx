@@ -14,7 +14,7 @@ export const CompletedSummary = (props: any) => {
             }
           </p>
           <p>
-            Brand:
+            Brand:{' '}
             {
               brands.find(
                 (brand: any) => brand.id == workOrder.brand_id
