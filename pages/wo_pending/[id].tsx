@@ -23,7 +23,6 @@ const Index: NextPage = (props: any) => {
 
   useEffect(() => {
     queueOrderAcceptReject(props.id).then((data: any) => {
-      console.log(data);
       if (data.order) {
         setWorkOrder(data.order);
       }
@@ -48,6 +47,11 @@ const Index: NextPage = (props: any) => {
       tracker_status: 1,
     };
     let submitFlag = true;
+    let declineReason: string = '';
+    let brandId: number = 99;
+    let targetTime: number = 0;
+    let initialComments: string = '';
+    let initialCost: number = 0;
 
     Array.prototype.forEach.call(
       e.target.elements,
@@ -55,17 +59,22 @@ const Index: NextPage = (props: any) => {
         // console.log(element.id, ' ', element.value);
         if (element.id == 'updateTime') {
           formData = { ...formData, target_time: element.value };
+          targetTime = element.value;
         } else if (element.id == 'updateCost') {
           formData = { ...formData, initial_cost: element.value };
+          initialCost = element.value;
         } else if (element.id == 'initialComments' && element.value) {
           formData = { ...formData, initial_comments: element.value };
+          initialComments = element.value;
         } else if (element.id == 'declineReason' && element.value) {
           formData = {
             ...formData,
             decline_reason: element.value,
           };
+          declineReason = element.value;
         } else if (element.id == 'brands') {
           formData = { ...formData, brand_id: element.value };
+          brandId = element.value;
         } else if (element.id == 'submitReject') {
           formData = { ...formData, tracker_status: 99 };
           submitFlag = false;
@@ -73,7 +82,11 @@ const Index: NextPage = (props: any) => {
       }
     );
     if (!submitFlag) {
-      const rejectedbody: any = rejectedCopy(workOrder, specifics);
+      const rejectedbody: any = rejectedCopy(
+        declineReason,
+        workOrder,
+        specifics
+      );
       const ticketData = {
         ticket: {
           subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
@@ -105,16 +118,10 @@ const Index: NextPage = (props: any) => {
           comment: {
             body: `
             Your Work Order has been accepted. We will update you again once work has started, thanks.
-            ${
-              workOrder.brand_id
-                ? `Brand ID: ${workOrder.brand_id} \n`
-                : ''
-            }
-            ${
-              workOrder.initial_cost
-                ? ` Inital Cost: ${workOrder.initial_cost} \n`
-                : ''
-            }
+            ${`Brand Name: ${brandId} \n`}
+            ${`Est Cost: £${initialCost} \n`}
+            ${`Target Time: ${targetTime} \n`}
+            ${`Warehouse Acceptance Comments: ${initialComments} \n`}
             ${
               workOrder.initial_units_or_quantity
                 ? ` Inital Units/Quantity: ${workOrder.initial_units_or_quantity} \n`
@@ -122,7 +129,7 @@ const Index: NextPage = (props: any) => {
             }
             ${
               workOrder.work_task_id
-                ? ` Work Task ID: ${workOrder.work_task_id} \n`
+                ? `Work Task: ${workOrder.work_task_id} \n`
                 : ''
             }`,
           },

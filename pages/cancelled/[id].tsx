@@ -9,9 +9,9 @@ import { CancelledSummary } from '../../components/WorkOrderScreens/AcceptorReje
 
 const Index: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState({ tracking_id: null });
-  const [specifics, setSpecifics] = useState({});
-  const [tasks, setTasks] = useState({});
-  const [workers, setWorkers] = useState({});
+  const [specifics, setSpecifics] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [workers, setWorkers] = useState([]);
 
   useEffect(() => {
     getAllOrderData(props.id).then((data: any) => {
