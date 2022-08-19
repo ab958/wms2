@@ -116,15 +116,25 @@ const Index: NextPage = (props: any) => {
           status: 'pending',
           recipient: workOrder.email,
           comment: {
-            body: `
-            Your Work Order has been accepted. We will update you again once work has started, thanks.
+            body:
+              `Your work order request has been approved by the team! 
+            You’ll get another email to let you know when we start working on your request and another to let you know that we have finished it.
+            You don’t need to do anything else, we’ll be in touch with an update soon! 
+            From, 
+            The Tu Pack Team
+            ` +
+              `
             ${`Brand Name: ${brandId} \n`}
             ${`Est Cost: £${initialCost} \n`}
-            ${`Target Time: ${targetTime} \n`}
-            ${`Warehouse Acceptance Comments: ${initialComments} \n`}
+            ${`Target Time: ${targetTime} mins\n`}
+            ${`Warehouse Acceptance Comments: ${
+              initialComments || '-'
+            } \n`}
             ${
               workOrder.initial_units_or_quantity
-                ? ` Inital Units/Quantity: ${workOrder.initial_units_or_quantity} \n`
+                ? ` Inital Units/Quantity: ${
+                    workOrder.initial_units_or_quantity || '-'
+                  } \n`
                 : ''
             }
             ${

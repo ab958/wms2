@@ -1,8 +1,6 @@
-import WorkTasks from '../../data/workTasks';
-
-let workTaskName = (id: number) => {
-  WorkTasks.find((task: any) => task.id === id)?.name;
-};
+// let workTaskName = (id: number) => {
+//   WorkTasks.find((task: any) => task.id === id)?.name;
+// };
 
 export const rejectedCopy = (
   declineReason: string,
@@ -19,7 +17,7 @@ export const rejectedCopy = (
           Initial Details \n
           ${
             order.work_task_id
-              ? `Work Task: ${workTaskName(order.work_task_id)} \n`
+              ? `Work Task: ${order.work_task_id} \n`
               : '-'
           }
           ${order.name ? `Your Name: ${order.name} \n` : '-'}
