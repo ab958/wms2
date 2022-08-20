@@ -85,6 +85,8 @@ const Index: NextPage = (props: any) => {
       const rejectedbody: any = rejectedCopy(
         declineReason,
         workOrder,
+        tasks,
+        brands,
         specifics
       );
       const ticketData = {
