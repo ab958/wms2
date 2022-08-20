@@ -1,37 +1,37 @@
-// let workTaskName = (id: number) => {
-//   WorkTasks.find((task: any) => task.id === id)?.name;
-// };
+import {
+  getBrandName,
+  getWorkTaskName,
+} from '../../data/services/helpers';
 
 export const rejectedCopy = (
   declineReason: string,
   order: any,
+  tasks: any,
+  brands: any,
   specificFields: any
 ) => {
+  const workTaskName: string = getWorkTaskName(
+    tasks,
+    order.work_task_id
+  );
+  const brandName: string = getBrandName(brands, order.brand_id);
+
   return `We are sorry to inform you that your work order has not been completed.\n
           ${
             declineReason
               ? `Decline reason: ${declineReason} \n`
-              : null
+              : '-'
           }
           \n
           Initial Details \n
-          ${
-            order.work_task_id
-              ? `Work Task: ${order.work_task_id} \n`
-              : '-'
-          }
+          ${workTaskName ? `Work Task: ${workTaskName} \n` : '-'}
           ${order.name ? `Your Name: ${order.name} \n` : '-'}
           ${
             order.brand_entry
               ? `Your Brand Entry: ${order.brand_entry} \n`
               : '-'
           }
-          ${
-            order.brand_id
-              ? `Actual Brand: ${order.brand_id} \n`
-              : '-'
-          }
-          
+          ${brandName ? `Actual Brand: ${brandName} \n` : '-'}
           ${
             order.initial_units_or_quantity
               ? `Units / Qty: ${order.initial_units_or_quantity} \n`

@@ -2,7 +2,10 @@ import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout/Layout';
 import { FinishSummary } from '../../components/WorkOrderScreens/Finish/FinishSummary';
-import { finishOrder, updateOrderTable } from '../../data/services';
+import {
+  getAllOrderData,
+  updateOrderTable,
+} from '../../data/services';
 import S3UploadFile from '../../components/s3UploadFile';
 import Button from '../../components/Button/';
 import { TimeSummary } from '../../components/WorkOrderScreens/Finish/TimeSummary';
@@ -23,9 +26,10 @@ const FinishIndex: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState<any>();
   const [specifics, setSpecifics] = useState<any>([]);
   const [tasks, setTasks] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   useEffect(() => {
-    finishOrder(props.id).then((data: any) => {
+    getAllOrderData(props.id).then((data: any) => {
       console.log(data);
       if (data.order) {
         setWorkOrder(data.order);
@@ -36,6 +40,9 @@ const FinishIndex: NextPage = (props: any) => {
       if (data.workTasks) {
         setTasks(data.workTasks);
       }
+      if (data.brands) {
+        setBrands(data.brands);
+      }
     });
   }, []);
 
@@ -44,8 +51,9 @@ const FinishIndex: NextPage = (props: any) => {
     const S3_BUCKET = process.env.NEXT_PUBLIC_LOCAL_S3_BUCKET;
     let formData: any = { tracker_status: 3 };
     let QCPics: any = [];
-    const emailAd = workOrder ? workOrder.email : '';
     let submitFlag = true;
+    const emailAd = workOrder ? workOrder.email : '';
+    let declineReason: string = '';
 
     Array.prototype.forEach.call(
       e.target.elements,
@@ -99,7 +107,13 @@ const FinishIndex: NextPage = (props: any) => {
       }
     );
     if (!submitFlag) {
-      const rejectedBody: any = rejectedCopy(workOrder, specifics);
+      const rejectedBody: any = rejectedCopy(
+        declineReason,
+        workOrder,
+        tasks,
+        brands,
+        specifics
+      );
       const ticketData = {
         ticket: {
           subject: `Ticket Rejected: ${workOrder['tracking_id']} `,

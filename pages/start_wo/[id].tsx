@@ -20,9 +20,11 @@ const Index: NextPage = (props: any) => {
   const [specifics, setSpecifics] = useState<any>([]);
   const [tasks, setTasks] = useState([]);
   const [workers, setWorkers] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   useEffect(() => {
     getAllOrderData(props.id).then((data: any) => {
+      console.log(data);
       if (data.order) {
         setWorkOrder(data.order);
       }
@@ -35,6 +37,9 @@ const Index: NextPage = (props: any) => {
       if (data.workers) {
         setWorkers(data.workers);
       }
+      if (data.brands) {
+        setBrands(data.brands);
+      }
     });
   }, []);
 
@@ -45,12 +50,13 @@ const Index: NextPage = (props: any) => {
       tracker_status: 2,
     };
     let submitFlag = true;
+    let declineReason: string = '';
 
     console.log(e.target.elements, '<=elements');
     Array.prototype.forEach.call(
       e.target.elements,
       async (element: any) => {
-        // console.log('element id =>', element.id, ' ', element.value);
+        console.log('element id =>', element.id, ' ', element.value);
         if (element.id == 'declineReason') {
           formData = {
             ...formData,
@@ -58,6 +64,7 @@ const Index: NextPage = (props: any) => {
             decline_reason: element.value,
           };
           submitFlag = false;
+          declineReason = element.value;
         } else if (element.id == 'startDate') {
           formData = { ...formData, start_time: element.value };
         } else if (element.id == 'assignWorker') {
@@ -73,14 +80,20 @@ const Index: NextPage = (props: any) => {
       }
     );
     if (!submitFlag) {
-      const rejectedbody: any = rejectedCopy(workOrder, specifics);
+      const rejectedBody: any = rejectedCopy(
+        declineReason,
+        workOrder,
+        tasks,
+        brands,
+        specifics
+      );
       const ticketData = {
         ticket: {
           subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
           status: 'solved',
           recipient: workOrder.email,
           comment: {
-            body: rejectedbody,
+            body: rejectedBody,
           },
         },
       };

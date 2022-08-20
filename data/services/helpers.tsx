@@ -10,3 +10,18 @@ export const throwZendeskDBUpdateError = (errorObj: any) => {
   console.log(errorObj.message);
   throw new Error('Order Update error');
 };
+
+export const getBrandName = (brands: any, brandID: number) => {
+  const brand = brands.find((brand: any) => brand.id == brandID);
+  return brand ? brand.name : 99;
+};
+
+export const getWorkTaskName = (
+  workTasks: any,
+  workTaskID: number
+) => {
+  const workTask = workTasks.find(
+    (workTask: any) => workTask.id == workTaskID
+  );
+  return workTask ? workTask.name : 99;
+};
