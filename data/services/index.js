@@ -77,7 +77,6 @@ export const queueOrderAcceptReject = async (id) => {
   const specificFields = await findSpecificFieldsForOrder(id);
   const workTasks = await fetchWorkTasks();
   const brands = await fetchBrands();
-  console.log(brands);
   return { order, specificFields, workTasks, brands };
 };
 

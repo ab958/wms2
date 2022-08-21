@@ -2,7 +2,6 @@ import { goBackXDaysCalendarFormat } from '../../../data/services/helpers';
 
 export const TimeSummary = (props: any) => {
   const { workOrder } = props;
-  console.log(props);
 
   return (
     <>

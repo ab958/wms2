@@ -15,7 +15,6 @@ const Index: NextPage = (props: any) => {
 
   useEffect(() => {
     getAllOrderData(props.id).then((data: any) => {
-      console.log(data);
       if (data.order) {
         setWorkOrder(data.order);
       }

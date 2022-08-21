@@ -5,7 +5,7 @@ export const goBackXDaysCalendarFormat = (days: number) => {
   return yesterday.toISOString().split('T')[0];
 };
 
-export const throwZendeskDBUpdateError = (errorObj: any) => {
+export const throwDBUpdateError = (errorObj: any) => {
   alert('Database update failed - please try again');
   console.log(errorObj.message);
   throw new Error('Order Update error');
