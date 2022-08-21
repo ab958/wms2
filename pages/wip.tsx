@@ -39,7 +39,7 @@ const WIPPage: NextPage = () => {
           <TableWip
             orders={WIPOrders}
             workers={workers}
-            workTasks={workTasks}
+            tasks={workTasks}
             brands={brands}
           />
         ) : (
