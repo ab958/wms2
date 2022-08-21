@@ -109,3 +109,11 @@ export const getWorkTaskNames = (orders, tasks) => {
     return { ...o, task_name: task_name };
   });
 };
+
+export const updateOrderTable = async (newData, id) => {
+  const { data, error } = await supabaseClient
+    .from('order')
+    .update(newData)
+    .eq('id', id);
+  return { data, error };
+};
