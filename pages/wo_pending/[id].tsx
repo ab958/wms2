@@ -13,7 +13,11 @@ import Title from '../../components/Title';
 import Router from 'next/router';
 // import { updateZendeskTicket } from '../../data/services/zendesk';
 // import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
-import { throwDBUpdateError } from '../../data/services/helpers';
+import {
+  // getBrandName,
+  // getWorkTaskName,
+  throwDBUpdateError,
+} from '../../data/services/helpers';
 
 const Index: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState<any>({});
@@ -47,11 +51,12 @@ const Index: NextPage = (props: any) => {
       tracker_status: 1,
     };
     let submitFlag = true;
-    let declineReason: string = '';
-    let brandId: number = 99;
-    let targetTime: number = 0;
-    let initialComments: string = '';
-    let initialCost: number = 0;
+    // let declineReason: string = '';
+    // let brandName: string = '';
+    // let workTaskName = getWorkTaskName(tasks, workOrder.work_task_id);
+    // let targetTime: number = 0;
+    // let initialComments: string = '';
+    // let initialCost: number = 0;
 
     Array.prototype.forEach.call(
       e.target.elements,
@@ -59,22 +64,22 @@ const Index: NextPage = (props: any) => {
         // console.log(element.id, ' ', element.value);
         if (element.id == 'updateTime') {
           formData = { ...formData, target_time: element.value };
-          targetTime = element.value;
+          // targetTime = element.value;
         } else if (element.id == 'updateCost') {
           formData = { ...formData, initial_cost: element.value };
-          initialCost = element.value;
+          // initialCost = element.value;
         } else if (element.id == 'initialComments' && element.value) {
           formData = { ...formData, initial_comments: element.value };
-          initialComments = element.value;
+          // initialComments = element.value;
         } else if (element.id == 'declineReason' && element.value) {
           formData = {
             ...formData,
             decline_reason: element.value,
           };
-          declineReason = element.value;
+          // declineReason = element.value;
         } else if (element.id == 'brands') {
           formData = { ...formData, brand_id: element.value };
-          brandId = element.value;
+          // brandName = getBrandName(brands, element.value);
         } else if (element.id == 'submitReject') {
           formData = { ...formData, tracker_status: 99 };
           submitFlag = false;
@@ -126,7 +131,7 @@ const Index: NextPage = (props: any) => {
       //       The Tu Pack Team
       //       ` +
       //         `
-      //       ${`Brand Name: ${brandId} \n`}
+      //       ${`Brand Name: ${brandName} \n`}
       //       ${`Est Cost: £${initialCost} \n`}
       //       ${`Target Time: ${targetTime} mins\n`}
       //       ${`Warehouse Acceptance Comments: ${
@@ -134,14 +139,14 @@ const Index: NextPage = (props: any) => {
       //       } \n`}
       //       ${
       //         workOrder.initial_units_or_quantity
-      //           ? ` Inital Units/Quantity: ${
+      //           ? `Inital Units/Quantity: ${
       //               workOrder.initial_units_or_quantity || '-'
       //             } \n`
       //           : ''
       //       }
       //       ${
       //         workOrder.work_task_id
-      //           ? `Work Task: ${workOrder.work_task_id} \n`
+      //           ? `Work Task: ${workTaskName} \n`
       //           : ''
       //       }`,
       //     },

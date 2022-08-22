@@ -30,7 +30,6 @@ const FinishIndex: NextPage = (props: any) => {
 
   useEffect(() => {
     getAllOrderData(props.id).then((data: any) => {
-      console.log(data);
       if (data.order) {
         setWorkOrder(data.order);
       }
@@ -58,7 +57,7 @@ const FinishIndex: NextPage = (props: any) => {
     Array.prototype.forEach.call(
       e.target.elements,
       async (element: any) => {
-        console.log(element.id, ' ', element.value);
+        // console.log(element.id, ' ', element.value);
         if (element.id == 'declineReason') {
           formData = {
             ...formData,
@@ -132,7 +131,6 @@ const FinishIndex: NextPage = (props: any) => {
       //   workOrder.zendesk_id,
       //   ticketData
       // );
-      // console.log(response);
       // if (!response.success) {
       //   alert('Error closing Zendesk Ticket - please try again');
       //   throw new Error('Zendesk Ticket Update error');
@@ -160,7 +158,6 @@ const FinishIndex: NextPage = (props: any) => {
       //   workOrder.zendesk_id,
       //   ticketData
       // );
-      // console.log(response);
       // if (!response.success) {
       //   alert('Error closing Zendesk Ticket - please try again');
       //   throw new Error('Zendesk Ticket Update error');

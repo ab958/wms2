@@ -49,7 +49,7 @@ const Index: NextPage = (props: any) => {
       tracker_status: 2,
     };
     let submitFlag = true;
-    let declineReason: string = '';
+    // let declineReason: string = '';
 
     Array.prototype.forEach.call(
       e.target.elements,
@@ -62,7 +62,7 @@ const Index: NextPage = (props: any) => {
             decline_reason: element.value,
           };
           submitFlag = false;
-          declineReason = element.value;
+          // declineReason = element.value;
         } else if (element.id == 'startDate') {
           formData = { ...formData, start_time: element.value };
         } else if (element.id == 'assignWorker') {
