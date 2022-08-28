@@ -14,7 +14,7 @@ export declare type QueueObject = {
   phone_number?: string;
   decline_reason?: string;
   start_time?: string;
-  finish_time?: string;
+  finish_date?: Date;
   expected_finish_date?: string;
   qc_pics?: String[];
   [otherOptions: string]: unknown;

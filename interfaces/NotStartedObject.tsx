@@ -1,7 +1,7 @@
 import { QueueObject } from './QueueObject';
 
 export interface NotStartedObject extends QueueObject {
-  time_accepted: string;
+  date_accepted: string;
   brand_id: number;
   assigned_to: number;
   initial_cost: string;

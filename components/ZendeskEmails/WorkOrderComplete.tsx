@@ -2,8 +2,10 @@ export const workOrderCompleteCopy = (
   order: any,
   specificFields: any
 ) => {
-  return `Your work order has now been completed.\n
-          Order Complete Summary \n
+  return `Hey!\n\n
+  Great news - your Work Order has been completed! You can see a summary of the work done below.\n\n
+  If you have any questions, we’re always here!\n\n
+  Tu Pack\n
           ${
             order.work_task_id
               ? `Work Task: ${order.work_task_id} \n`
@@ -59,8 +61,8 @@ export const workOrderCompleteCopy = (
               : ''
           }
           ${
-            order.finish_time
-              ? `Actual Finish Date: ${order.finish_time} \n`
+            order.finish_date
+              ? `Actual Finish Date: ${order.finish_date} \n`
               : ''
           }
           \n
@@ -73,8 +75,8 @@ export const workOrderCompleteCopy = (
               : ''
           }
           ${
-            order.time_accepted
-              ? `Date Accepted: ${order.time_accepted} \n`
+            order.date_accepted
+              ? `Date Accepted: ${order.date_accepted} \n`
               : ''
           }
           ${
@@ -120,8 +122,8 @@ export const workOrderCompleteCopy = (
               : ''
           }
           ${
-            specificFields.courierId
-              ? `CourierID: ${specificFields.courierId} \n`
+            specificFields.courier
+              ? `Courier: ${specificFields.courier} \n`
               : ''
           }
           ${

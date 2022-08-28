@@ -47,7 +47,7 @@ const Index: NextPage = (props: any) => {
     e.preventDefault();
 
     let formData: any = {
-      time_accepted: new Date().toISOString().toLocaleString(),
+      date_accepted: new Date().toISOString().toLocaleString(),
       tracker_status: 1,
     };
     let submitFlag = true;
@@ -125,9 +125,13 @@ const Index: NextPage = (props: any) => {
       //     comment: {
       //       body:
       //         `Your work order request has been approved by the team!
+
       //       You’ll get another email to let you know when we start working on your request and another to let you know that we have finished it.
+
       //       You don’t need to do anything else, we’ll be in touch with an update soon!
+
       //       From,
+
       //       The Tu Pack Team
       //       ` +
       //         `

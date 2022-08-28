@@ -45,8 +45,8 @@ export const CancelledSummary = (props: any) => {
               <li>Target Time: {workOrder.target_time}</li>
             )}
             <li>Price: £{workOrder.initial_cost}</li>
-            {!workOrder.time_accepted ? null : (
-              <li>Time Accepted: {workOrder.time_accepted}</li>
+            {!workOrder.date_accepted ? null : (
+              <li>Date Accepted: {workOrder.date_accepted}</li>
             )}
             <li>
               Description:

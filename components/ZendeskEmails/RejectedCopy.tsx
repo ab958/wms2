@@ -15,8 +15,14 @@ export const rejectedCopy = (
     order.work_task_id
   );
   const brandName: string = getBrandName(brands, order.brand_id);
+  console.log(
+    specificFields.orderNumbers,
+    specificFields.pics,
+    specificFields.skus
+  );
 
-  return `We are sorry to inform you that your work order has not been completed.\n
+  return `This email is to let you know that we cannot currently complete this Work Order request, we are sorry for any inconvenience that this may cause. 
+  You can see the message from the team to explain why below:\n
           ${
             declineReason
               ? `Decline reason: ${declineReason} \n`
@@ -50,8 +56,8 @@ export const rejectedCopy = (
           \n
           More Order Details \n
           ${
-            order.time_accepted
-              ? `Date Accepted: ${order.time_accepted} \n`
+            order.date_accepted
+              ? `Date Accepted: ${order.date_accepted} \n`
               : '-'
           }
           ${
@@ -82,6 +88,11 @@ export const rejectedCopy = (
               : '-'
           }
           ${
+            specificFields.ASNandDate
+              ? `ASN & Date: ${specificFields.ASNandDate} \n`
+              : '-'
+          }
+          ${
             specificFields.barcodeRequired
               ? `Barcode Requied: ${specificFields.barcodeRequired} \n`
               : '-'
@@ -92,13 +103,18 @@ export const rejectedCopy = (
               : '-'
           }
           ${
-            specificFields.courierId
-              ? `CourierID: ${specificFields.courierId} \n`
+            specificFields.courier
+              ? `Courier Name: ${specificFields.courier} \n`
               : '-'
           }
           ${
             specificFields.dateRequired
               ? `Date Required: ${specificFields.dateRequired} \n`
+              : '-'
+          }
+          ${
+            specificFields.dateTimePreference
+              ? `Date & Time Preferred: ${specificFields.dateTimePreference} \n`
               : '-'
           }
           ${
@@ -114,6 +130,11 @@ export const rejectedCopy = (
           ${
             specificFields.dimensions
               ? `Dimensions: ${specificFields.dimensions} \n`
+              : '-'
+          }
+          ${
+            specificFields.dispatchDate
+              ? `Dispatch Date: ${specificFields.dispatchDate} \n`
               : '-'
           }
           ${
@@ -138,7 +159,7 @@ export const rejectedCopy = (
           }
           ${
             specificFields.itemNeedMeasuring
-              ? `Item Need Measuring: ${specificFields.itemNeedMeasuring} \n`
+              ? `Item Need Measuring?: ${specificFields.itemNeedMeasuring} \n`
               : '-'
           }
           ${
@@ -147,8 +168,8 @@ export const rejectedCopy = (
               : '-'
           }
           ${
-            specificFields.orderNumber
-              ? `Order Number: ${specificFields.orderNumber} \n`
+            specificFields.orderNumbers
+              ? `Order Numbers: ${specificFields.orderNumbers} \n`
               : '-'
           }
           ${
@@ -166,6 +187,17 @@ export const rejectedCopy = (
               ? `Parcel Dimensions: ${specificFields.parcelDimensions} \n`
               : '-'
           }
+          // Array
+          ${
+            specificFields.pics
+              ? `Pics: ${specificFields.pics} \n`
+              : '-'
+          }
+          ${
+            specificFields.prodNeedMintsoft
+              ? `Product need Mintsoft?: ${specificFields.prodNeedMintsoft} \n`
+              : '-'
+          }
           ${
             specificFields.quantityOfItems
               ? `Quantity: ${specificFields.quantityOfItems} \n`
@@ -173,12 +205,12 @@ export const rejectedCopy = (
           }
           ${
             specificFields.reasonForCount
-              ? `Reason for count: ${specificFields.reasonForCount} \n`
+              ? `Reason for count?: ${specificFields.reasonForCount} \n`
               : '-'
           }
           ${
-            specificFields.decline_reason
-              ? `Roll need mesasuring: ${specificFields.rollNeedMeasuring} \n`
+            specificFields.rollNeedMeasuring
+              ? `Roll need measuring?: ${specificFields.rollNeedMeasuring} \n`
               : '-'
           }
           ${
@@ -186,6 +218,7 @@ export const rejectedCopy = (
               ? `Roll Size: ${specificFields.rollSize} \n`
               : '-'
           }
+          // Array
           ${
             specificFields.skus
               ? `SKUS: ${specificFields.skus} \n`
@@ -194,6 +227,11 @@ export const rejectedCopy = (
           ${
             specificFields.threadColour
               ? `Thread Color: ${specificFields.threadColour} \n`
+              : '-'
+          }
+          ${
+            specificFields.timeFrame
+              ? `Time Frame: ${specificFields.timeFrame} \n`
               : '-'
           }
           ${

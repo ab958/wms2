@@ -35,8 +35,8 @@ export const CompletedSummary = (props: any) => {
             </li>
             <li>Initial Price: £{workOrder.initial_cost}</li>
             <li>Final Price: £{workOrder.final_price}</li>
-            <li>Date Accepted: {workOrder.time_accepted}</li>
-            <li>Finish Date: {workOrder.time_accepted}</li>
+            <li>Date Accepted: {workOrder.date_accepted}</li>
+            <li>Finish Date: {workOrder.finish_date}</li>
             <li>Time Taken: {workOrder.minutes_taken} mins</li>
             <li>Customer Description: {workOrder.description}</li>
           </ul>

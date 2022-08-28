@@ -67,8 +67,8 @@ const FinishIndex: NextPage = (props: any) => {
           submitFlag = false;
         } else if (element.id == 'timeTaken') {
           formData = { ...formData, minutes_taken: element.value };
-        } else if (element.id == 'finishTime') {
-          formData = { ...formData, finish_time: element.value };
+        } else if (element.id == 'finishDate') {
+          formData = { ...formData, finish_date: element.value };
         } else if (element.id == 'finalPrice') {
           formData = {
             ...formData,

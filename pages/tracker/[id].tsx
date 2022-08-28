@@ -9,9 +9,9 @@ const Tracking: NextPage = (Props: any) => {
       created_at={Props.created_at}
       tracker_status={Props.tracker_status}
       decline_reason={Props.decline_reason}
-      time_accepted={Props.time_accepted}
+      date_accepted={Props.date_accepted}
       expected_finish_date={Props.expected_finish_date}
-      finish_time={Props.finish_time}
+      finish_date={Props.finish_date}
       time_taken={Props.time_taken}
       target_time={Props.target_time}
       initial_cost={Props.initial_cost}

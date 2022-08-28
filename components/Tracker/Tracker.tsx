@@ -27,7 +27,7 @@ export function Tracker(props: any) {
           <>
             <b>Accepted</b>
             <p>
-              We accepted your work order at {props.time_accepted}.
+              We accepted your work order on {props.date_accepted}.
               <ul>
                 <li>Estimated time: {props.target_time}mins</li>
                 <li>Estimated cost: £{props.initial_cost}</li>
@@ -60,7 +60,7 @@ export function Tracker(props: any) {
           <>
             <b>Finished</b>
             <p>
-              Your work order was completed at {props.finish_time}.
+              Your work order was completed on {props.finish_date}.
               <ul>
                 <li>Time Taken: {props.time_taken}mins</li>
               </ul>

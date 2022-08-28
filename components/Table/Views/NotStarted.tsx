@@ -18,9 +18,9 @@ const NotStartedTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
-              onClick={() => requestSort('time_accepted')}
+              onClick={() => requestSort('date_accepted')}
               className={getClassNamesFor(
-                'time_accepted',
+                'date_accepted',
                 sortConfig
               )}
             >
@@ -98,10 +98,8 @@ const NotStartedTable = (props: any) => {
                   <td className="py-3 px-6 text-left">
                     <div className="flex items-center">
                       <span>
-                        {order.time_accepted
-                          ? (order.time_accepted as any)
-                              .slice(0, 19)
-                              .replace(/T/g, ' ')
+                        {order.date_accepted
+                          ? order.date_accepted
                           : 'null'}
                       </span>
                     </div>

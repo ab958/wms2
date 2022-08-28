@@ -43,9 +43,9 @@ const CompletedTable: React.FunctionComponent<Props> = ({
                   <td className="py-3 px-6 text-center">
                     <div className="flex align-center items-center">
                       <span className="text-center">
-                        {order.finish_time
+                        {order.finish_date
                           ? String(
-                              order.finish_time
+                              order.finish_date
                                 .slice(0, 19)
                                 .replace(/T/g, ' ')
                             )

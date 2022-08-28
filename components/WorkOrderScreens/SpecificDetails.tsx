@@ -16,15 +16,14 @@ export const SpecificDetails = (props: any) => {
         <li> --- </li>
         {!pics ? null : <h2>Customer Pictures</h2>}
         {!pics ? null : (
-          <ul>
+          <ul className="mb-3">
             {pics.map((url: any, index: any) => (
               <li key={index}>
-                Image {index + 1} -{' '}
-                <Link
-                  href={url}
-                  className="text-blue-700 no-underline hover:underline"
-                >
-                  Click to download
+                <b>Image {index + 1} - </b>
+                <Link href={url}>
+                  <a className="text-blue-700 no-underline hover:underline">
+                    Click to download
+                  </a>
                 </Link>
               </li>
             ))}

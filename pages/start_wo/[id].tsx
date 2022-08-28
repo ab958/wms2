@@ -116,10 +116,15 @@ const Index: NextPage = (props: any) => {
       //     recipient: workOrder.email,
       //     comment: {
       //       body: `
-      //       Your Work Order has now been started, we will let you know once it is complete.
-      //       ${
-      //         workOrder.start_time
-      //           ? `  Start Time: ${workOrder.start_time} \n`
+      //         `Hey!
+      //
+      //       We wanted to let you know that the team have started work on your Works Order request. We’ll be in touch once it is finished.
+      //
+      //       Tu Pack
+      //       ` +
+      //         `
+      //         ${workOrder.start_time
+      //           ? `Start Time: ${workOrder.start_time} \n`
       //           : ''
       //       }
       //       ${

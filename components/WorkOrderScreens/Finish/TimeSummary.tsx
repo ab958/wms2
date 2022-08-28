@@ -17,11 +17,11 @@ export const TimeSummary = (props: any) => {
       <p className="mt-3">
         <b>Target Time: </b> {workOrder.target_time} mins
       </p>
-      <label htmlFor="finishTime">Actual Finish Date</label>
+      <label htmlFor="finishDate">Actual Finish Date</label>
       <input
         type="date"
         min={goBackXDaysCalendarFormat(5)}
-        id="finishTime"
+        id="finishDate"
         required
       />
 

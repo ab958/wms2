@@ -17,7 +17,11 @@ export const WarehouseSummary = (props: any) => {
               {workOrder.qc_pics.map((url: any, index: any) => (
                 <li>
                   Image {index + 1} -{' '}
-                  <Link href={url}>Click to download</Link>
+                  <Link href={url}>
+                    <a className="text-blue-700 no-underline hover:underline">
+                      Click to download
+                    </a>
+                  </Link>
                 </li>
               ))}
             </ul>
