@@ -59,10 +59,6 @@ const InitialClientDetails: React.FunctionComponent<Props> = ({
         </Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.col1}>Initial Cost</Text>
-        <Text style={styles.col2}>£{order.initial_cost}</Text>
-      </View>
-      <View style={styles.row}>
         <Text style={styles.col1}>SKUs</Text>
         <Text style={styles.col2}>
           {specifics.skus ? specifics.skus : 'n/a'}

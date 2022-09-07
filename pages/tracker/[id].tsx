@@ -14,7 +14,6 @@ const Tracking: NextPage = (Props: any) => {
       finish_date={Props.finish_date}
       time_taken={Props.time_taken}
       target_time={Props.target_time}
-      initial_cost={Props.initial_cost}
     ></Tracker>
   );
 };

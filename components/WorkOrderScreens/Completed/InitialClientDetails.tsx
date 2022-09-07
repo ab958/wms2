@@ -18,7 +18,6 @@ export const InitialClientDetails = (props: any) => {
               Initial Units/Quantity:{' '}
               {workOrder.initial_units_or_quantity}
             </li>
-            <li>Initial Price: £{workOrder.initial_cost}</li>
             <li>Customer Description: {workOrder.description}</li>
           </ul>
         </>

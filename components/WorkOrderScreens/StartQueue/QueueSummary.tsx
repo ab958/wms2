@@ -21,7 +21,6 @@ export const QueueSummary = (props: any) => {
               {workOrder.initial_units_or_quantity}
             </li>
             <li>Target Time: {workOrder.target_time}mins</li>
-            <li>Price: £{workOrder.initial_cost}</li>
             <li>Date Accepted: {workOrder.date_accepted}</li>
             <li>Description: {workOrder.description}</li>
           </ul>

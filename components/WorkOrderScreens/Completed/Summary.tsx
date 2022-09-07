@@ -33,7 +33,6 @@ export const CompletedSummary = (props: any) => {
               Total Units/Quantity:{' '}
               {workOrder.final_units_or_quantity}
             </li>
-            <li>Initial Price: £{workOrder.initial_cost}</li>
             <li>Final Price: £{workOrder.final_price}</li>
             <li>Date Accepted: {workOrder.date_accepted}</li>
             <li>Finish Date: {workOrder.finish_date}</li>

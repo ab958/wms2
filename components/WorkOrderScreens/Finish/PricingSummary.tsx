@@ -3,9 +3,6 @@ export const PricingSummary = (props: any) => {
     <>
       <h2>Final Pricing</h2>
       <p>
-        <b>Initial Price Quoted: </b>£{props.workOrder.initial_cost}
-      </p>
-      <p>
         <b>Total Units / Quantity: </b>
         {props.workOrder.initial_units_or_quantity}
       </p>
@@ -15,7 +12,7 @@ export const PricingSummary = (props: any) => {
       </label>
       <input
         type="number"
-        placeholder={props.workOrder.initial_cost}
+        placeholder={props.workOrder.final_price}
         id="finalPrice"
         step=".01"
         required

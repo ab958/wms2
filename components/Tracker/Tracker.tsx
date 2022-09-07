@@ -30,7 +30,6 @@ export function Tracker(props: any) {
               We accepted your work order on {props.date_accepted}.
               <ul>
                 <li>Estimated time: {props.target_time}mins</li>
-                <li>Estimated cost: £{props.initial_cost}</li>
               </ul>
             </p>
             <p>
@@ -47,7 +46,6 @@ export function Tracker(props: any) {
               <ul>
                 <li>Work Order accepted on: {props.created_at}</li>
                 <li>Estimated time: {props.target_time}mins</li>
-                <li>Estimated cost: £{props.initial_cost}</li>
               </ul>
             </p>
             <p>
