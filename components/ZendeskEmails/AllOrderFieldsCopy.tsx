@@ -1,14 +1,17 @@
 import {
   getBrandName,
   getWorkTaskName,
+  getWorkerName,
 } from '../../data/services/helpers';
 
 export const AllOrderFieldsCopy = (
   order: any,
   workTasks: any,
-  brands: any
+  brands: any,
+  workers?: any
 ) => {
   const brandName = getBrandName(brands, order.brand_id);
+  const workerName = getWorkerName(workers, order.work_order_id);
   const workTaskName: string = getWorkTaskName(
     workTasks,
     order.work_task_id
@@ -24,7 +27,7 @@ export const AllOrderFieldsCopy = (
       ? `Your Brand Entry: ${order.brand_entry} \n`
       : '-'
   }
-  ${order.brand_id ? `Actual Brand: ${brandName} \n` : '-'}
+  ${order.brand_id ? `Brand: ${brandName} \n` : '-'}
   ${order.work_task_id ? `Work Task: ${workTaskName} \n` : '-'}
   ${
     order.description
@@ -91,8 +94,8 @@ export const AllOrderFieldsCopy = (
               : '-'
           }
           ${
-            order.worker_id
-              ? `Worker Name (TBCC): ${order.worker_id} \n`
+            order.worker_id && workerName
+              ? `Worker Name: ${workerName} \n`
               : '-'
           }
           ${

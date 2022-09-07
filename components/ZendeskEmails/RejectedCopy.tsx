@@ -34,10 +34,10 @@ export const rejectedCopy = (
           ${order.name ? `Your Name: ${order.name} \n` : '-'}
           ${
             order.brand_entry
-              ? `Your Brand Entry: ${order.brand_entry} \n`
+              ? `Brand Entry: ${order.brand_entry} \n`
               : '-'
           }
-          ${brandName ? `Actual Brand: ${brandName} \n` : '-'}
+          ${brandName ? `Brand: ${brandName} \n` : '-'}
           ${
             order.initial_units_or_quantity
               ? `Units / Qty: ${order.initial_units_or_quantity} \n`
