@@ -4,10 +4,8 @@ import { RejectWO } from './Options/RejectWO';
 
 export const ActionWO = ({
   targetTime = 0,
-  estCost = 0,
 }: {
   targetTime: number;
-  estCost: number;
 }) => {
   const [WOAction, setWOAction] = useState<
     'accept' | 'reject' | null
@@ -17,7 +15,7 @@ export const ActionWO = ({
     <>
       <h2 className="mt-3">Accept / Reject Work Order</h2>
       {WOAction && WOAction === 'accept' ? (
-        <AcceptWO targetTime={targetTime} estCost={estCost} />
+        <AcceptWO targetTime={targetTime} />
       ) : null}
       {WOAction && WOAction === 'reject' ? <RejectWO /> : null}
       <button

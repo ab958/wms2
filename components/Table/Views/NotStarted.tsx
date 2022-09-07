@@ -75,15 +75,6 @@ const NotStartedTable = (props: any) => {
               Target Time
             </button>
           </th>
-          <th className="py-3 px-6 text-left">
-            <button
-              type="button"
-              onClick={() => requestSort('initial_cost')}
-              className={getClassNamesFor('initial_cost', sortConfig)}
-            >
-              Initial Cost
-            </button>
-          </th>
           <th className="py-3 px-6 text-center">Start Order</th>
         </tr>
       </thead>
@@ -140,11 +131,6 @@ const NotStartedTable = (props: any) => {
                   <td className="py-3 px-6 text-center">
                     <div className="flex items-center justify-center">
                       <span>{order.target_time} minutes</span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    <div className="flex items-center justify-center">
-                      <span>£{order.initial_cost}</span>
                     </div>
                   </td>
                   <td>

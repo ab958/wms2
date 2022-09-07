@@ -94,15 +94,6 @@ const WIPTable = (props: any) => {
               Brand (Actual)
             </button>
           </th>
-          <th className="py-3 px-6 text-left">
-            <button
-              type="button"
-              onClick={() => requestSort('initial_cost')}
-              className={getClassNamesFor('initial_cost', sortConfig)}
-            >
-              Initial Cost
-            </button>
-          </th>
           <th className="py-3 px-6 text-center">Complete Order</th>
         </tr>
       </thead>
@@ -186,11 +177,6 @@ const WIPTable = (props: any) => {
                           )?.name
                         }
                       </span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    <div className="flex items-center justify-center">
-                      <span>£{order.initial_cost}</span>
                     </div>
                   </td>
                   <td>
