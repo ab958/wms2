@@ -17,6 +17,7 @@ const NewOrderTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('tracking_id')}
               className={getClassNamesFor('tracking_id', sortConfig)}
             >
@@ -26,6 +27,7 @@ const NewOrderTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('created_at')}
               className={getClassNamesFor('created_at', sortConfig)}
             >
@@ -35,6 +37,7 @@ const NewOrderTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('work_task_id')}
               className={getClassNamesFor('work_task_id', sortConfig)}
             >
@@ -44,6 +47,7 @@ const NewOrderTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('initial_units_or_quantity')}
               className={getClassNamesFor(
                 'initial_units_or_quantity',
@@ -56,6 +60,7 @@ const NewOrderTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('brand_entry')}
               className={getClassNamesFor('brand_entry', sortConfig)}
             >

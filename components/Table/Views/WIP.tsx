@@ -19,6 +19,7 @@ const WIPTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('start_time')}
               className={getClassNamesFor('start_time', sortConfig)}
             >
@@ -28,6 +29,7 @@ const WIPTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('expected_finish_date')}
               className={getClassNamesFor(
                 'expected_finish_date',
@@ -40,6 +42,7 @@ const WIPTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('tracking_id')}
               className={getClassNamesFor('tracking_id', sortConfig)}
             >
@@ -49,6 +52,7 @@ const WIPTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('work_task_id')}
               className={getClassNamesFor('work_task_id', sortConfig)}
             >
@@ -58,6 +62,7 @@ const WIPTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('initial_units_or_quantity')}
               className={getClassNamesFor(
                 'initial_units_or_quantity',
@@ -70,6 +75,7 @@ const WIPTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('worker_id')}
               className={getClassNamesFor('worker_id', sortConfig)}
             >
@@ -79,6 +85,7 @@ const WIPTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('target_time')}
               className={getClassNamesFor('target_time', sortConfig)}
             >
@@ -88,6 +95,7 @@ const WIPTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('brand_id')}
               className={getClassNamesFor('brand_id', sortConfig)}
             >

@@ -18,6 +18,7 @@ const NotStartedTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('date_accepted')}
               className={getClassNamesFor(
                 'date_accepted',
@@ -30,6 +31,7 @@ const NotStartedTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('tracking_id')}
               className={getClassNamesFor('tracking_id', sortConfig)}
             >
@@ -39,6 +41,7 @@ const NotStartedTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('work_task_id')}
               className={getClassNamesFor('work_task_id', sortConfig)}
             >
@@ -48,6 +51,7 @@ const NotStartedTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('initial_units_or_quantity')}
               className={getClassNamesFor(
                 'initial_units_or_quantity',
@@ -60,6 +64,7 @@ const NotStartedTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('brand_id')}
               className={getClassNamesFor('brand_id', sortConfig)}
             >
@@ -69,6 +74,7 @@ const NotStartedTable = (props: any) => {
           <th className="py-3 px-6 text-left">
             <button
               type="button"
+              id="sortButton"
               onClick={() => requestSort('target_time')}
               className={getClassNamesFor('target_time', sortConfig)}
             >

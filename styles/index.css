@@ -46,6 +46,10 @@
     @apply w-1/4 p-1 bg-black rounded-full font-bold text-white border-2 cursor-pointer;
   }
 
+  button[id='sortButton'] {
+    @apply bg-transparent font-bold border-none rounded-none text-gray-600 uppercase text-sm leading-normal cursor-pointer;
+  }
+
   textarea {
     @apply overflow-auto w-full p-2 bg-white text-black rounded-md  border border-gray-700;
   }
