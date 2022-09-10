@@ -13,7 +13,10 @@ const NewOrderTable = (props: any) => {
   return (
     <table className="min-w-max w-full table-auto">
       <thead>
-        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <tr
+          key={orders.tracking_id}
+          className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal"
+        >
           <th className="py-3 px-6 text-left">
             <button
               type="button"
@@ -24,7 +27,7 @@ const NewOrderTable = (props: any) => {
               ID
             </button>
           </th>
-          <th className="py-3 px-6 text-left">
+          <th className="py-3 text-left">
             <button
               type="button"
               id="sortButton"
@@ -34,7 +37,7 @@ const NewOrderTable = (props: any) => {
               Submission Date
             </button>
           </th>
-          <th className="py-3 px-6 text-left">
+          <th className="py-3 text-left">
             <button
               type="button"
               id="sortButton"
@@ -44,7 +47,7 @@ const NewOrderTable = (props: any) => {
               Work Task
             </button>
           </th>
-          <th className="py-3 px-6 text-left">
+          <th className="py-3 text-left">
             <button
               type="button"
               id="sortButton"
@@ -57,7 +60,7 @@ const NewOrderTable = (props: any) => {
               Units / Quantity
             </button>
           </th>
-          <th className="py-3 px-6 text-left">
+          <th className="py-3 text-left">
             <button
               type="button"
               id="sortButton"
@@ -67,7 +70,7 @@ const NewOrderTable = (props: any) => {
               Brand (Customer Entry)
             </button>
           </th>
-          <th className="py-3 px-6 text-center">Approve or Deny</th>
+          <th className="text-center">Approve or Deny</th>
         </tr>
       </thead>
       <tbody className="text-gray-600 text-sm font-light">
@@ -78,16 +81,14 @@ const NewOrderTable = (props: any) => {
                   key={order.tracking_id}
                   className="border-b border-gray-200 hover:bg-gray-100"
                 >
-                  <td className="py-3 px-6 text-center">
-                    <div className="flex align-center items-center">
-                      <span className="text-center">
-                        {order.tracking_id}
-                      </span>
+                  <td className="">
+                    <div className="">
+                      <span className="">{order.tracking_id}</span>
                     </div>
                   </td>
-                  <td className="py-3 px-6 text-center">
-                    <div className="flex align-center items-center">
-                      <span className="text-center">
+                  <td className="">
+                    <div className="">
+                      <span className="">
                         {order.created_at
                           ? String(
                               order.created_at
@@ -98,8 +99,8 @@ const NewOrderTable = (props: any) => {
                       </span>
                     </div>
                   </td>
-                  <td className="py-3 px-6 text-center">
-                    <div className="flex align-center items-center">
+                  <td className="">
+                    <div className="">
                       <span className="text-center">
                         {
                           tasks.find(
@@ -110,14 +111,14 @@ const NewOrderTable = (props: any) => {
                       </span>
                     </div>
                   </td>
-                  <td className="py-3 px-6 text-center">
+                  <td className="py-3 px-6 text-left">
                     <div className="flex align-center items-center">
                       <span className="text-center">
                         {order.initial_units_or_quantity}
                       </span>
                     </div>
                   </td>
-                  <td className="py-3 px-6 text-center">
+                  <td className="py-3 px-6 text-left">
                     <div className="flex align-center items-center">
                       <span className="text-center">
                         {order.brand_entry}

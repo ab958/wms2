@@ -28,7 +28,7 @@ const NotStartedTable = (props: any) => {
               Date Accepted
             </button>
           </th>
-          <th className="py-3 px-6 text-left">
+          <th className="text-left">
             <button
               type="button"
               id="sortButton"
@@ -38,7 +38,7 @@ const NotStartedTable = (props: any) => {
               ID
             </button>
           </th>
-          <th className="py-3 px-6 text-left">
+          <th className="text-left">
             <button
               type="button"
               id="sortButton"
@@ -48,15 +48,12 @@ const NotStartedTable = (props: any) => {
               Work Task
             </button>
           </th>
-          <th className="py-3 px-6 text-left">
+          <th className="text-left">
             <button
               type="button"
               id="sortButton"
-              onClick={() => requestSort('initial_units_or_quantity')}
-              className={getClassNamesFor(
-                'initial_units_or_quantity',
-                sortConfig
-              )}
+              onClick={() => requestSort('work_task_id')}
+              className={getClassNamesFor('work_task_id', sortConfig)}
             >
               Units / Quantity
             </button>
@@ -81,7 +78,7 @@ const NotStartedTable = (props: any) => {
               Target Time
             </button>
           </th>
-          <th className="py-3 px-6 text-center">Start Order</th>
+          <th className="py-3 px-6 text-left">Start Order</th>
         </tr>
       </thead>
       <tbody className="text-gray-600 text-sm font-light">
@@ -108,23 +105,25 @@ const NotStartedTable = (props: any) => {
                       </span>
                     </div>
                   </td>
-                  <td className="py-3 px-6 text-center">
-                    <div className="flex items-center justify-center">
-                      {
-                        tasks.find(
-                          (task: any) =>
-                            task.id === order.work_task_id
-                        )?.name
-                      }
+                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                    <div className="flex items-center">
+                      <span>
+                        {
+                          tasks.find(
+                            (task: any) =>
+                              task.id === order.work_task_id
+                          )?.name
+                        }
+                      </span>
                     </div>
                   </td>
-                  <td className="py-3 px-6 text-center">
-                    <span className="font-medium">
-                      {order.initial_units_or_quantity}
-                    </span>
+                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                    <div className="flex items-center">
+                      <span>{order.initial_units_or_quantity}</span>
+                    </div>
                   </td>
-                  <td className="py-3 px-6 text-center">
-                    <div className="flex items-center justify-center">
+                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                    <div className="flex items-center">
                       <span>
                         {
                           brands.find(
@@ -134,19 +133,15 @@ const NotStartedTable = (props: any) => {
                       </span>
                     </div>
                   </td>
-                  <td className="py-3 px-6 text-center">
-                    <div className="flex items-center justify-center">
-                      <span>{order.target_time} minutes</span>
-                    </div>
+                  <td className="">
+                    <span>{order.target_time} minutes</span>
                   </td>
                   <td>
-                    <div className="flex justify-center">
-                      <Link href={`/start_wo/${order.id}`}>
-                        <button className=" bg-blue-600 w-full rounded-md text-white outline-none focus:ring-4 shadow-lg">
-                          {'Start'}
-                        </button>
-                      </Link>
-                    </div>
+                    <Link href={`/start_wo/${order.id}`}>
+                      <button className=" bg-blue-600 w-full rounded-md text-white outline-none focus:ring-4 shadow-lg">
+                        {'Start'}
+                      </button>
+                    </Link>
                   </td>
                 </tr>
               );

@@ -16,7 +16,9 @@ export const getBrandName = (brands: any, brandID: number) => {
   return brand ? brand.name : 99;
 };
 export const getWorkerName = (workers: any, workerID: number) => {
-  const worker = workers.find((worker: any) => worker.id == workerID);
+  const worker = workers?.find(
+    (worker: any) => worker.id == workerID
+  );
   return worker ? worker.name : 99;
 };
 
