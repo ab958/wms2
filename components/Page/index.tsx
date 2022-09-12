@@ -2,10 +2,21 @@ import Heading from '../Layout/Heading';
 import Layout from '../Layout/Layout';
 import Link from 'next/link';
 import Title from '../Title';
+import { supabaseClient } from '../../lib/client';
+
 type Props = {
   title?: string;
   layoutTitle?: string;
   pageName: string;
+};
+
+const handleLogout = async () => {
+  try {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) throw error;
+  } catch (error: any) {
+    alert(error.error_description || error.message);
+  }
 };
 
 const Page: React.FunctionComponent<Props> = ({
@@ -42,6 +53,16 @@ const Page: React.FunctionComponent<Props> = ({
             <Link href="/cancelled">
               <a>Cancelled</a>
             </Link>
+          </div>
+          <div>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
+            >
+              Logout
+            </button>
           </div>
           <div className="bg-white shadow-md rounded my-6">
             <Title text={pageName} />
