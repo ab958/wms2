@@ -1,49 +1,68 @@
 import { NextPage } from 'next';
+import { useState } from 'react';
+import { supabaseClient } from '../lib/client';
 import logoOrange from '../public/logoOrange.png';
 
 const LoginPage: NextPage = () => {
+  const [email, setEmail] = useState('');
+
+  const handleLogin = async (email: string) => {
+    try {
+      const { user, error } = await supabaseClient.auth.signIn({
+        email,
+      });
+      if (error) throw error;
+      console.log(user);
+      alert('Check your email for the login link!');
+    } catch (error: any) {
+      alert(error.error_description || error.message);
+    }
+  };
+
   return (
     <>
-      <body className="bg-amber-500 ">
-        <div className="flex min-h-screen items-center justify-center">
-          <div className=" bg-white border border-none p-3 rounded-2xl">
-            <div className="sm:mx-24 md:mx-34 lg:mx-56 mx-auto  flex items-center space-y-4 py-16 font-semibold text-gray-500 flex-col">
-              <div className="w-2/5 h-1/5">
-                <img src={logoOrange.src} alt="logo" />
-                <h1 className="text-black text-center text-4xl">
-                  Admin Access to WMS Tracker
-                </h1>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg">
+          <img
+            src={logoOrange.src}
+            alt="logo"
+            width="200"
+            height="50"
+          />
+          <div className="flex justify-center"></div>
+          <h3 className="text-2xl font-bold">WMS: Log In</h3>
+          <form action="">
+            <div className="mt-4">
+              <div>
+                <label className="block" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                />
+                <span className="text-s tracking-wide text-red-600">
+                  We'll send you a magic link to login to the app
+                </span>
               </div>
-
-              <form
-                className="orderAuth flex flex-col  space-y-5 py-10"
-                //   onSubmit={handleSubmit}
-              >
-                <h1 className="text-black text-2xl">
-                  Process Your Work Orders here
-                </h1>
-
-                <input
-                  required
-                  className="w-full p-2 bg-white rounded-md  border border-gray-700 focus:border-blue-700"
-                  placeholder="Username"
-                  type="text"
-                />
-                <input
-                  required
-                  className="w-full p-2 bg-white rounded-md  border border-gray-700 focus:border-blue-700"
-                  placeholder="Password"
-                  type="password"
-                />
-                <input
-                  className="w-full p-2 bg-black hover:bg-amber-500 rounded-full font-bold text-white border-gray-700 cursor-pointer"
-                  type="submit"
-                />
-              </form>
+              <div className="flex items-baseline justify-between">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLogin(email);
+                  }}
+                  className="px-6 py-2 mt-4 text-black bg-yellow-500 rounded-lg hover:bg-blue-900"
+                >
+                  Get Link
+                </button>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
-      </body>
+      </div>
     </>
   );
 };

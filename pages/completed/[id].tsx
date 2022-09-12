@@ -8,6 +8,8 @@ import { CompletedSummary } from '../../components/WorkOrderScreens/Completed/Su
 import { WarehouseSummary } from '../../components/WorkOrderScreens/Completed/WarehouseNotes';
 import { InitialClientDetails } from '../../components/WorkOrderScreens/Completed/InitialClientDetails';
 import Title from '../../components/Title';
+import { useRouter } from 'next/router';
+import useUser from '../../helpers/hooks/useUser';
 
 const Index: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState({ tracking_id: null });
@@ -15,6 +17,9 @@ const Index: NextPage = (props: any) => {
   const [tasks, setTasks] = useState([]);
   const [workers, setWorkers] = useState([]);
   const [brands, setBrands] = useState([]);
+
+  const router = useRouter();
+  const { user, isLoading } = useUser();
 
   useEffect(() => {
     getAllOrderData(props.id).then((data: any) => {
@@ -36,36 +41,46 @@ const Index: NextPage = (props: any) => {
     });
   }, []);
 
-  return (
-    <>
-      {workOrder && tasks && workers && specifics && brands && (
-        <>
-          <Layout
-            title={`Order #${workOrder.tracking_id} | Completed Orders | WMS | TuPack`}
-          />
-          <Title
-            text={`Completed Order - #${workOrder.tracking_id}`}
-          />
-          <Button text="Go Back" hyperlink="/completed" />
-          <CompletedSummary
-            workOrder={workOrder}
-            tasks={tasks}
-            brands={brands}
-          />
-          <WarehouseSummary workOrder={workOrder} />
-          <InitialClientDetails
-            workOrder={workOrder}
-            tasks={tasks}
-            specificFields={specifics}
-          />
-          <SpecificDetails
-            specifics={specifics}
-            workOrder={workOrder}
-          />
-        </>
-      )}
-    </>
-  );
+  useEffect(() => {
+    if (!user && !isLoading) {
+      router.push('/login');
+    }
+  }, [user, isLoading, router]);
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  } else {
+    return (
+      <>
+        {workOrder && tasks && workers && specifics && brands && (
+          <>
+            <Layout
+              title={`Order #${workOrder.tracking_id} | Completed Orders | WMS | TuPack`}
+            />
+            <Title
+              text={`Completed Order - #${workOrder.tracking_id}`}
+            />
+            <Button text="Go Back" hyperlink="/completed" />
+            <CompletedSummary
+              workOrder={workOrder}
+              tasks={tasks}
+              brands={brands}
+            />
+            <WarehouseSummary workOrder={workOrder} />
+            <InitialClientDetails
+              workOrder={workOrder}
+              tasks={tasks}
+              specificFields={specifics}
+            />
+            <SpecificDetails
+              specifics={specifics}
+              workOrder={workOrder}
+            />
+          </>
+        )}
+      </>
+    );
+  }
 };
 
 export default Index;

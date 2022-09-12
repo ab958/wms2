@@ -149,28 +149,6 @@ const CompletedTable = (props: any) => {
                     <span className="text-center">{`${order.minutes_taken} mins`}</span>
                   </div>
                 </td>
-
-                {/* <td>
-                  <div className="flex justify-center bg-blue-600 rounded-md ">
-                    <PDFDownloadLink
-                      document={
-                        <Receipt
-                          order={order}
-                          brand={brands.find(
-                            (x: any) => x.id === order.brand_id
-                          )}
-                          task={workTasks.find(
-                            (x: any) => x.id == order.work_task_id
-                          )}
-                        />
-                      }
-                      fileName="recipt"
-                      className="px-3 py-1 w-full text-center font-bold bg-blue-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-75 transition-transform"
-                    >
-                      Get Receipt
-                    </PDFDownloadLink>
-                  </div>
-                </td> */}
                 <td>
                   <div className="flex justify-center">
                     <Link href={`/completed/${order.id}`}>
