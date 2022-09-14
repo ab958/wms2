@@ -10,18 +10,20 @@ import {
   updateOrderTable,
 } from '../../data/services';
 import Button from '../../components/Button';
-// import { updateZendeskTicket } from '../../data/services/zendesk';
+import { updateZendeskTicket } from '../../data/services/zendesk';
 import Router, { useRouter } from 'next/router';
-// import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
+import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
 import { throwDBUpdateError } from '../../data/services/helpers';
 import useUser from '../../helpers/hooks/useUser';
+import { AllOrderFieldsCopy } from '../../components/ZendeskEmails/AllOrderFieldsCopy';
+import { SpecificFieldsCopy } from '../../components/ZendeskEmails/SpecificFieldsCopy';
 
 const Index: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState<any>();
   const [specifics, setSpecifics] = useState<any>([]);
   const [tasks, setTasks] = useState([]);
   const [workers, setWorkers] = useState([]);
-  // const [brands, setBrands] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   const router = useRouter();
   const { user, isLoading } = useUser();
@@ -40,11 +42,18 @@ const Index: NextPage = (props: any) => {
       if (data.workers) {
         setWorkers(data.workers);
       }
-      // if (data.brands) {
-      //   setBrands(data.brands);
-      // }
+      if (data.brands) {
+        setBrands(data.brands);
+      }
     });
   }, []);
+
+  const orderCopy: string = AllOrderFieldsCopy(
+    workOrder,
+    tasks,
+    brands
+  );
+  const specificFieldsCopy: string = SpecificFieldsCopy(specifics);
 
   useEffect(() => {
     if (!user && !isLoading) {
@@ -62,7 +71,7 @@ const Index: NextPage = (props: any) => {
         tracker_status: 2,
       };
       let submitFlag = true;
-      // let declineReason: string = '';
+      let declineReason: string = '';
 
       Array.prototype.forEach.call(
         e.target.elements,
@@ -75,7 +84,7 @@ const Index: NextPage = (props: any) => {
               decline_reason: element.value,
             };
             submitFlag = false;
-            // declineReason = element.value;
+            declineReason = element.value;
           } else if (element.id == 'startDate') {
             formData = { ...formData, start_time: element.value };
           } else if (element.id == 'assignWorker') {
@@ -91,23 +100,23 @@ const Index: NextPage = (props: any) => {
         }
       );
       if (!submitFlag) {
-        // const rejectedBody: any = rejectedCopy(
-        //   declineReason,
-        //   workOrder,
-        //   tasks,
-        //   brands,
-        //   specifics
-        // );
-        // const ticketData = {
-        //   ticket: {
-        //     subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
-        //     status: 'solved',
-        //     recipient: workOrder.email,
-        //     comment: {
-        //       body: rejectedBody,
-        //     },
-        //   },
-        // };
+        const rejectedBody: any = rejectedCopy(
+          declineReason,
+          workOrder,
+          tasks,
+          brands,
+          specifics
+        );
+        const ticketData = {
+          ticket: {
+            subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
+            status: 'solved',
+            recipient: workOrder.email,
+            comment: {
+              body: rejectedBody,
+            },
+          },
+        };
         const tableUpdate = await updateOrderTable(
           formData,
           props.id
@@ -115,63 +124,34 @@ const Index: NextPage = (props: any) => {
         if (tableUpdate.error) {
           throwDBUpdateError(tableUpdate.error);
         }
-        // const response = await updateZendeskTicket(
-        //   workOrder.zendesk_id,
-        //   ticketData
-        // );
-        // console.log(response);
-        // if (!response.success) {
-        //   alert('Error updating Zendesk Ticket - please try again');
-        //   throw new Error('Zendesk Ticket Update error');
-        // }
+        const response = await updateZendeskTicket(
+          workOrder.zendesk_id,
+          ticketData
+        );
+        console.log(response);
+        if (!response.success) {
+          alert('Error updating Zendesk Ticket - please try again');
+          throw new Error('Zendesk Ticket Update error');
+        }
       } else {
-        // const ticketData = {
-        //   ticket: {
-        //     subject: `Work Order Started: ${workOrder['tracking_id']} `,
-        //     status: 'pending',
-        //     recipient: workOrder.email,
-        //     comment: {
-        //       body: `
-        //         `Hey!
-        //
-        //       We wanted to let you know that the team have started work on your Works Order request. We’ll be in touch once it is finished.
-        //
-        //       Tu Pack
-        //       ` +
-        //         `
-        //         ${workOrder.start_time
-        //           ? `Start Time: ${workOrder.start_time} \n`
-        //           : ''
-        //       }
-        //       ${
-        //         workOrder.expected_finish_date
-        //           ? `Finish Date:  ${workOrder.expected_finish_date} \n`
-        //           : ''
-        //       }
-        //       ${
-        //         workOrder.worker_id
-        //           ? `Brand ID: ${workOrder.brand_id} \n`
-        //           : ''
-        //       }
-        //       ${
-        //         workOrder.brand_id
-        //           ? `Brand ID: ${workOrder.brand_id} \n`
-        //           : ''
-        //       }
-        //       ${
-        //         workOrder.initial_cost
-        //           ? ` Inital Cost: ${workOrder.initial_cost} \n`
-        //           : ''
-        //       }
-        //       ${
-        //         workOrder.work_task_id
-        //           ? ` Work Task ID: ${workOrder.work_task_id} \n`
-        //           : ''
-        //       }
-        //        `,
-        //     },
-        //   },
-        // };
+        const ticketData = {
+          ticket: {
+            subject: `Work Order Started: ${workOrder['tracking_id']} `,
+            status: 'pending',
+            recipient: workOrder.email,
+            comment: {
+              body:
+                `Hey!
+        
+              We wanted to let you know that the team have started work on your Works Order request. We’ll be in touch once it is finished.
+        
+              Tu Pack
+              ` +
+                `${orderCopy}` +
+                `${specificFieldsCopy}`,
+            },
+          },
+        };
         const tableUpdate = await updateOrderTable(
           formData,
           props.id
@@ -179,15 +159,15 @@ const Index: NextPage = (props: any) => {
         if (tableUpdate.error) {
           throwDBUpdateError(tableUpdate.error);
         }
-        // const response = await updateZendeskTicket(
-        //   workOrder.zendesk_id,
-        //   ticketData
-        // );
-        // console.log(response);
-        // if (!response.success) {
-        //   alert('Error updating Zendesk Ticket - please try again');
-        //   throw new Error('Zendesk Ticket Update error');
-        // }
+        const response = await updateZendeskTicket(
+          workOrder.zendesk_id,
+          ticketData
+        );
+        console.log(response);
+        if (!response.success) {
+          alert('Error updating Zendesk Ticket - please try again');
+          throw new Error('Zendesk Ticket Update error');
+        }
       }
       alert('Ticket updated successfully');
       Router.push({

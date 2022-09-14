@@ -11,13 +11,14 @@ import {
 import Button from '../../components/Button';
 import Title from '../../components/Title';
 import Router from 'next/router';
-// import { updateZendeskTicket } from '../../data/services/zendesk';
-// import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
+import { updateZendeskTicket } from '../../data/services/zendesk';
+import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
 import {
-  // getBrandName,
-  // getWorkTaskName,
+  getBrandName,
   throwDBUpdateError,
 } from '../../data/services/helpers';
+import { AllOrderFieldsCopy } from '../../components/ZendeskEmails/AllOrderFieldsCopy';
+import { SpecificFieldsCopy } from '../../components/ZendeskEmails/SpecificFieldsCopy';
 
 const Index: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState<any>({});
@@ -43,6 +44,13 @@ const Index: NextPage = (props: any) => {
     });
   }, []);
 
+  const orderCopy: string = AllOrderFieldsCopy(
+    workOrder,
+    tasks,
+    brands
+  );
+  const specificFieldsCopy: string = SpecificFieldsCopy(specifics);
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -51,12 +59,10 @@ const Index: NextPage = (props: any) => {
       tracker_status: 1,
     };
     let submitFlag = true;
-    // let declineReason: string = '';
-    // let brandName: string = '';
-    // let workTaskName = getWorkTaskName(tasks, workOrder.work_task_id);
-    // let targetTime: number = 0;
-    // let initialComments: string = '';
-    // let initialCost: number = 0;
+    let declineReason: string = '';
+    let brandName: string = '';
+    let targetTime: number = 0;
+    let initialComments: string = '';
 
     Array.prototype.forEach.call(
       e.target.elements,
@@ -64,22 +70,19 @@ const Index: NextPage = (props: any) => {
         // console.log(element.id, ' ', element.value);
         if (element.id == 'updateTime') {
           formData = { ...formData, target_time: element.value };
-          // targetTime = element.value;
-        } else if (element.id == 'updateCost') {
-          formData = { ...formData, initial_cost: element.value };
-          // initialCost = element.value;
+          targetTime = element.value;
         } else if (element.id == 'initialComments' && element.value) {
           formData = { ...formData, initial_comments: element.value };
-          // initialComments = element.value;
+          initialComments = element.value;
         } else if (element.id == 'declineReason' && element.value) {
           formData = {
             ...formData,
             decline_reason: element.value,
           };
-          // declineReason = element.value;
+          declineReason = element.value;
         } else if (element.id == 'brands') {
           formData = { ...formData, brand_id: element.value };
-          // brandName = getBrandName(brands, element.value);
+          brandName = getBrandName(brands, element.value);
         } else if (element.id == 'submitReject') {
           formData = { ...formData, tracker_status: 99 };
           submitFlag = false;
@@ -87,88 +90,71 @@ const Index: NextPage = (props: any) => {
       }
     );
     if (!submitFlag) {
-      // const rejectedbody: any = rejectedCopy(
-      //   declineReason,
-      //   workOrder,
-      //   tasks,
-      //   brands,
-      //   specifics
-      // );
-      // const ticketData = {
-      //   ticket: {
-      //     subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
-      //     status: 'solved',
-      //     recipient: workOrder.email,
-      //     comment: {
-      //       body: rejectedbody,
-      //     },
-      //   },
-      // };
+      const rejectedbody: any = rejectedCopy(
+        declineReason,
+        workOrder,
+        tasks,
+        brands,
+        specifics
+      );
+      const ticketData = {
+        ticket: {
+          subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
+          status: 'solved',
+          recipient: workOrder.email,
+          comment: {
+            body: rejectedbody,
+          },
+        },
+      };
       const tableUpdate = await updateOrderTable(formData, props.id);
       if (tableUpdate.error) {
         throwDBUpdateError(tableUpdate.error);
       }
-      // const response = await updateZendeskTicket(
-      //   workOrder.zendesk_id,
-      //   ticketData
-      // );
-      // if (!response.success) {
-      //   alert('Error updating Zendesk Ticket - please try again');
-      //   throw new Error('Zendesk Ticket Update error');
-      // }
+      const response = await updateZendeskTicket(
+        workOrder.zendesk_id,
+        ticketData
+      );
+      if (!response.success) {
+        alert('Error updating Zendesk Ticket - please try again');
+        throw new Error('Zendesk Ticket Update error');
+      }
     } else {
-      // const ticketData = {
-      //   ticket: {
-      //     subject: `Work Order Accepted: ${workOrder['tracking_id']} `,
-      //     status: 'pending',
-      //     recipient: workOrder.email,
-      //     comment: {
-      //       body:
-      //         `Your work order request has been approved by the team!
+      const ticketData = {
+        ticket: {
+          subject: `Work Order Accepted: ${workOrder['tracking_id']} `,
+          status: 'pending',
+          recipient: workOrder.email,
+          comment: {
+            body:
+              `Your work order request has been approved by the team!
 
-      //       You’ll get another email to let you know when we start working on your request and another to let you know that we have finished it.
+            You’ll get another email to let you know when we start working on your request and another to let you know that we have finished it.
 
-      //       You don’t need to do anything else, we’ll be in touch with an update soon!
+            You don’t need to do anything else, we’ll be in touch with an update soon!
 
-      //       From,
+            From,
 
-      //       The Tu Pack Team
-      //       ` +
-      //         `
-      //       ${`Brand Name: ${brandName} \n`}
-      //       ${`Est Cost: £${initialCost} \n`}
-      //       ${`Target Time: ${targetTime} mins\n`}
-      //       ${`Warehouse Acceptance Comments: ${
-      //         initialComments || '-'
-      //       } \n`}
-      //       ${
-      //         workOrder.initial_units_or_quantity
-      //           ? `Inital Units/Quantity: ${
-      //               workOrder.initial_units_or_quantity || '-'
-      //             } \n`
-      //           : ''
-      //       }
-      //       ${
-      //         workOrder.work_task_id
-      //           ? `Work Task: ${workTaskName} \n`
-      //           : ''
-      //       }`,
-      //     },
-      //   },
-      // };
+            The Tu Pack Team
+            ` +
+              `${orderCopy}` +
+              `${specificFieldsCopy}`,
+          },
+        },
+      };
 
       const tableUpdate = await updateOrderTable(formData, props.id);
       if (tableUpdate.error) {
         throwDBUpdateError(tableUpdate.error);
       }
-      // const response = await updateZendeskTicket(
-      //   workOrder.zendesk_id,
-      //   ticketData
-      // );
-      // if (!response.success) {
-      //   alert('Error updating Zendesk Ticket - please try again');
-      //   throw new Error('Zendesk Ticket Update error');
-      // }
+      const response = await updateZendeskTicket(
+        workOrder.zendesk_id,
+        ticketData
+      );
+      if (!response.success) {
+        alert('Error updating Zendesk Ticket - please try again');
+        throw new Error('Zendesk Ticket Update error');
+      }
     }
     alert('Ticket updated successfully');
     Router.push({

@@ -12,12 +12,12 @@ import { TimeSummary } from '../../components/WorkOrderScreens/Finish/TimeSummar
 import { FinishWO } from '../../components/WorkOrderScreens/Finish/FinishWO';
 import { PricingSummary } from '../../components/WorkOrderScreens/Finish/PricingSummary';
 import { SpecificDetails } from '../../components/WorkOrderScreens/SpecificDetails';
-// import { updateZendeskTicket } from '../../data/services/zendesk';
+import { updateZendeskTicket } from '../../data/services/zendesk';
 import Router, { useRouter } from 'next/router';
 import { throwDBUpdateError } from '../../data/services/helpers';
 import useUser from '../../helpers/hooks/useUser';
-// import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
-// import { workOrderCompleteCopy } from '../../components/ZendeskEmails/WorkOrderComplete';
+import { workOrderCompleteCopy } from '../../components/ZendeskEmails/WorkOrderComplete';
+import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
 
 interface File {
   name: string;
@@ -27,7 +27,7 @@ const FinishIndex: NextPage = (props: any) => {
   const [workOrder, setWorkOrder] = useState<any>();
   const [specifics, setSpecifics] = useState<any>([]);
   const [tasks, setTasks] = useState([]);
-  // const [brands, setBrands] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   const router = useRouter();
   const { user, isLoading } = useUser();
@@ -43,9 +43,9 @@ const FinishIndex: NextPage = (props: any) => {
       if (data.workTasks) {
         setTasks(data.workTasks);
       }
-      // if (data.brands) {
-      //   setBrands(data.brands);
-      // }
+      if (data.brands) {
+        setBrands(data.brands);
+      }
     });
   }, []);
 
@@ -65,7 +65,7 @@ const FinishIndex: NextPage = (props: any) => {
       let QCPics: any = [];
       let submitFlag = true;
       const emailAd = workOrder ? workOrder.email : '';
-      // let declineReason: string = '';
+      let declineReason: string = '';
 
       Array.prototype.forEach.call(
         e.target.elements,
@@ -119,23 +119,23 @@ const FinishIndex: NextPage = (props: any) => {
         }
       );
       if (!submitFlag) {
-        // const rejectedBody: any = rejectedCopy(
-        //   declineReason,
-        //   workOrder,
-        //   tasks,
-        //   brands,
-        //   specifics
-        // );
-        // const ticketData = {
-        //   ticket: {
-        //     subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
-        //     status: 'solved',
-        //     recipient: workOrder.email,
-        //     comment: {
-        //       body: rejectedBody,
-        //     },
-        //   },
-        // };
+        const rejectedBody: any = rejectedCopy(
+          declineReason,
+          workOrder,
+          tasks,
+          brands,
+          specifics
+        );
+        const ticketData = {
+          ticket: {
+            subject: `Ticket Rejected: ${workOrder['tracking_id']} `,
+            status: 'solved',
+            recipient: workOrder.email,
+            comment: {
+              body: rejectedBody,
+            },
+          },
+        };
         const tableUpdate = await updateOrderTable(
           formData,
           props.id
@@ -143,29 +143,29 @@ const FinishIndex: NextPage = (props: any) => {
         if (tableUpdate.error) {
           throwDBUpdateError(tableUpdate.error);
         }
-        // const response = await updateZendeskTicket(
-        //   workOrder.zendesk_id,
-        //   ticketData
-        // );
-        // if (!response.success) {
-        //   alert('Error closing Zendesk Ticket - please try again');
-        //   throw new Error('Zendesk Ticket Update error');
-        // }
+        const response = await updateZendeskTicket(
+          workOrder.zendesk_id,
+          ticketData
+        );
+        if (!response.success) {
+          alert('Error closing Zendesk Ticket - please try again');
+          throw new Error('Zendesk Ticket Update error');
+        }
       } else {
-        // const completeBody = workOrderCompleteCopy(
-        //   workOrder,
-        //   specifics
-        // );
-        // const ticketData = {
-        //   ticket: {
-        //     subject: `Work Order Completed: ${workOrder['tracking_id']}`,
-        //     status: 'solved',
-        //     recipient: workOrder.email,
-        //     comment: {
-        //       body: completeBody,
-        //     },
-        //   },
-        // };
+        const completeBody = workOrderCompleteCopy(
+          workOrder,
+          specifics
+        );
+        const ticketData = {
+          ticket: {
+            subject: `Work Order Completed: ${workOrder['tracking_id']}`,
+            status: 'solved',
+            recipient: workOrder.email,
+            comment: {
+              body: completeBody,
+            },
+          },
+        };
         const tableUpdate = await updateOrderTable(
           formData,
           props.id
@@ -173,14 +173,14 @@ const FinishIndex: NextPage = (props: any) => {
         if (tableUpdate.error) {
           throwDBUpdateError(tableUpdate.error);
         }
-        // const response = await updateZendeskTicket(
-        //   workOrder.zendesk_id,
-        //   ticketData
-        // );
-        // if (!response.success) {
-        //   alert('Error closing Zendesk Ticket - please try again');
-        //   throw new Error('Zendesk Ticket Update error');
-        // }
+        const response = await updateZendeskTicket(
+          workOrder.zendesk_id,
+          ticketData
+        );
+        if (!response.success) {
+          alert('Error closing Zendesk Ticket - please try again');
+          throw new Error('Zendesk Ticket Update error');
+        }
       }
       alert('Ticket closed successfully');
       Router.push({
