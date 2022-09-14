@@ -13,7 +13,11 @@ import Button from '../../components/Button';
 import { updateZendeskTicket } from '../../data/services/zendesk';
 import Router, { useRouter } from 'next/router';
 import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
-import { throwDBUpdateError } from '../../data/services/helpers';
+import {
+  getBrandName,
+  getWorkerName,
+  throwDBUpdateError,
+} from '../../data/services/helpers';
 import useUser from '../../helpers/hooks/useUser';
 import { AllOrderFieldsCopy } from '../../components/ZendeskEmails/AllOrderFieldsCopy';
 import { SpecificFieldsCopy } from '../../components/ZendeskEmails/SpecificFieldsCopy';
@@ -54,7 +58,7 @@ const Index: NextPage = (props: any) => {
     brands
   );
   const specificFieldsCopy: string = SpecificFieldsCopy(specifics);
-
+  const brandName = getBrandName(brands, workOrder.brand_id);
   useEffect(() => {
     if (!user && !isLoading) {
       router.push('/login');
@@ -72,6 +76,9 @@ const Index: NextPage = (props: any) => {
       };
       let submitFlag = true;
       let declineReason: string = '';
+      let startDate: any;
+      let finishDate: any;
+      let workerName: string = '';
 
       Array.prototype.forEach.call(
         e.target.elements,
@@ -87,13 +94,16 @@ const Index: NextPage = (props: any) => {
             declineReason = element.value;
           } else if (element.id == 'startDate') {
             formData = { ...formData, start_time: element.value };
+            startDate = element.value;
           } else if (element.id == 'assignWorker') {
             formData = { ...formData, worker_id: element.value };
+            workerName = getWorkerName(workers, element.value);
           } else if (element.id == 'estFinishDate') {
             formData = {
               ...formData,
               expected_finish_date: element.value,
             };
+            finishDate = element.value;
           } else if (element.id == 'submitReject') {
             submitFlag = false;
           }
@@ -136,7 +146,7 @@ const Index: NextPage = (props: any) => {
       } else {
         const ticketData = {
           ticket: {
-            subject: `Work Order Started: ${workOrder['tracking_id']} `,
+            subject: `WMS Work Order Started | ${brandName} | ${workOrder['tracking_id']} `,
             status: 'pending',
             recipient: workOrder.email,
             comment: {
@@ -147,6 +157,22 @@ const Index: NextPage = (props: any) => {
         
               Tu Pack
               ` +
+                `          ${
+                  startDate
+                    ? `Expected Start Date: ${startDate} \n`
+                    : 'Expected Start Date: Not Found'
+                }
+            ${
+              finishDate
+                ? `Expected Finish Date: ${finishDate} \n`
+                : 'Expected Finish Date: Not Found'
+            }
+            ${
+              workerName
+                ? `Assigned to: ${workerName} \n`
+                : 'Assigned To: Not Found'
+            }
+            ` +
                 `${orderCopy}` +
                 `${specificFieldsCopy}`,
             },

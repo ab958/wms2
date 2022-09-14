@@ -122,7 +122,7 @@ const Index: NextPage = (props: any) => {
     } else {
       const ticketData = {
         ticket: {
-          subject: `Work Order Accepted: ${workOrder['tracking_id']} `,
+          subject: `WMS Work Order Accepted | ${brandName} | ${workOrder['tracking_id']} `,
           status: 'pending',
           recipient: workOrder.email,
           comment: {
@@ -137,6 +137,14 @@ const Index: NextPage = (props: any) => {
 
             The Tu Pack Team
             ` +
+              `          ${
+                initialComments
+                  ? `Warehouse Comments: ${initialComments} \n`
+                  : 'Warehouse Comments: n/a'
+              }
+            ${
+              targetTime ? `Target Time: ${targetTime}mins \n` : '-'
+            }` +
               `${orderCopy}` +
               `${specificFieldsCopy}`,
           },

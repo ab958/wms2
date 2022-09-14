@@ -14,7 +14,10 @@ import { PricingSummary } from '../../components/WorkOrderScreens/Finish/Pricing
 import { SpecificDetails } from '../../components/WorkOrderScreens/SpecificDetails';
 import { updateZendeskTicket } from '../../data/services/zendesk';
 import Router, { useRouter } from 'next/router';
-import { throwDBUpdateError } from '../../data/services/helpers';
+import {
+  getBrandName,
+  throwDBUpdateError,
+} from '../../data/services/helpers';
 import useUser from '../../helpers/hooks/useUser';
 import { workOrderCompleteCopy } from '../../components/ZendeskEmails/WorkOrderComplete';
 import { rejectedCopy } from '../../components/ZendeskEmails/RejectedCopy';
@@ -66,6 +69,7 @@ const FinishIndex: NextPage = (props: any) => {
       let submitFlag = true;
       const emailAd = workOrder ? workOrder.email : '';
       let declineReason: string = '';
+      const brandName = getBrandName(brands, workOrder.brand_id);
 
       Array.prototype.forEach.call(
         e.target.elements,
@@ -154,11 +158,13 @@ const FinishIndex: NextPage = (props: any) => {
       } else {
         const completeBody = workOrderCompleteCopy(
           workOrder,
-          specifics
+          specifics,
+          tasks,
+          brands
         );
         const ticketData = {
           ticket: {
-            subject: `Work Order Completed: ${workOrder['tracking_id']}`,
+            subject: `Work Order Completed | ${brandName} | ${workOrder['tracking_id']}`,
             status: 'solved',
             recipient: workOrder.email,
             comment: {
