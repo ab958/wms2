@@ -63,6 +63,10 @@ const Page: React.FunctionComponent<Props> = ({
             >
               Logout
             </button>
+            {
+              window.location.href.split('?')[1] ? localStorage.setItem("url", window.location.href.split('?')[1]) : ''
+            }
+            <a  href="/api/zendex/auth"> Get Access Token</a>
           </div>
           <div className="bg-white shadow-md rounded my-6">
             <Title text={pageName} />
