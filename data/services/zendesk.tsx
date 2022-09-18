@@ -4,8 +4,9 @@ import axios from "axios";
 export const createZendeskTicket = async (ticketData: object) => {
   try {
     const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Basic ${process.env.NEXT_PUBLIC_ZENDESK_API_TOKEN}`,
+      // 'Content-Type': 'application/json',
+      Authorization: `Bearer ${window.localStorage.getItem("url")}`,
+      "Access-Control-Allow-Origin": "*"
     };
 
     const {data} = await axios.post(`${process.env.NEXT_PUBLIC_ZENDESK_URL}/api/v2/tickets.json`, ticketData,{
@@ -23,8 +24,9 @@ export const updateZendeskTicket = async (ticketID: number, ticketData: object) 
 
   try {
     const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Basic ${process.env.NEXT_PUBLIC_ZENDESK_API_TOKEN}`,
+      // 'Content-Type': 'application/json',
+      Authorization: `Bearer ${window.localStorage.getItem("url")}`,
+      "Access-Control-Allow-Origin": "*"
     };
 
     const {data} = await axios.put(`${process.env.NEXT_PUBLIC_ZENDESK_URL}/api/v2/tickets/${ticketID}.json`, ticketData,{
