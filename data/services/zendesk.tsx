@@ -9,9 +9,14 @@ export const createZendeskTicket = async (ticketData: object) => {
       "Access-Control-Allow-Origin": "*"
     };
 
-    const {data} = await axios.post(`${process.env.NEXT_PUBLIC_ZENDESK_URL}/api/v2/tickets.json`, ticketData,{
-      headers
-    })
+    let body ={
+      headers,
+      ticketData
+    }
+
+    const {data} = await axios.post('/api/zendex/createticket', body)
+
+    console.log(data.response,"bbb")
     return {success: true, data};
   } catch (error) {
     console.log(error);
@@ -29,9 +34,14 @@ export const updateZendeskTicket = async (ticketID: number, ticketData: object) 
       "Access-Control-Allow-Origin": "*"
     };
 
-    const {data} = await axios.put(`${process.env.NEXT_PUBLIC_ZENDESK_URL}/api/v2/tickets/${ticketID}.json`, ticketData,{
-      headers
-    })
+    let body ={
+      headers,
+      ticketData,
+      ticketID
+    }
+
+    const {data} = await axios.post('/api/zendex/updateticket', body)
+    console.log(data,"aaaaa")
     return {success: true, data};
   } catch (error) {
     console.log(error);
