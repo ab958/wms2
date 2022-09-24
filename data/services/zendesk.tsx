@@ -8,7 +8,7 @@ export const updateZendeskTicket = async (
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${window.localStorage.getItem('url')}`,
-      // "Access-Control-Allow-Origin": "*"
+      'Access-Control-Allow-Origin': '*',
     };
 
     const { data } = await axios.put(
@@ -18,7 +18,8 @@ export const updateZendeskTicket = async (
         headers,
       }
     );
-    console.log(data, 'aaaaa');
+    console.log('headers:', headers);
+    console.log('data: ', data);
     return { success: true, data };
   } catch (error) {
     console.log('error');
