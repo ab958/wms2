@@ -6,9 +6,7 @@ export const updateZendeskTicket = async (
 ) => {
   try {
     const headers = {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${window.localStorage.getItem('url')}`,
-      'Access-Control-Allow-Origin': '*',
     };
 
     const { data } = await axios.put(
