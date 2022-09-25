@@ -6,22 +6,21 @@ export const updateZendeskTicket = async (
 ) => {
   try {
     const headers = {
-      Authorization: `Bearer ${window.localStorage.getItem('url')}`,
+      Authorization: `Bearer ${window.localStorage.getItem("url")}`,
+      "Access-Control-Allow-Origin": "*"
     };
 
-    const { data } = await axios.put(
-      `${process.env.NEXT_PUBLIC_ZENDESK_URL}/api/v2/tickets/${ticketID}.json`,
+    let body ={
+      headers,
       ticketData,
-      {
-        headers,
-      }
-    );
-    console.log('headers:', headers);
-    console.log('data: ', data);
-    return { success: true, data };
+      ticketID
+    }
+
+    const {data} = await axios.post('/api/zendex/updateticket', body)
+    console.log(data,"aaaaa")
+    return {success: true, data};
   } catch (error) {
-    console.log('error');
     console.log(error);
-    return { success: false };
+    return {success: false};
   }
 };
